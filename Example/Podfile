@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'CCContinuousGlucose_Example' do
+  pod 'CCContinuousGlucose', :path => '../'
+
+  target 'CCContinuousGlucose_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
