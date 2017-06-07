@@ -29,6 +29,8 @@ public class ContinuousGlucoseSOCP : NSObject {
     public var rateOfDecreaseAlertLevel: Float = 0
     public var rateOfIncreaseAlertLevel: Float = 0
     
+    public var continuousGlucoseCalibration: ContinuousGlucoseCalibration!
+    
     enum Fields: Int {
         case reserved,
         setCGMCommunicationInterval,
@@ -71,11 +73,14 @@ public class ContinuousGlucoseSOCP : NSObject {
         socpResponseType?.getBytes(&socpResponse, length: 1)
         
         switch (socpResponse) {
-            case ContinuousGlucoseSOCP.Fields.cgmCommunicationIntervalResponse.rawValue: //3
+            case ContinuousGlucoseSOCP.Fields.cgmCommunicationIntervalResponse.rawValue:
                 let communicationIntervalData = (data.subdata(with: cgmCommunicationIntervalRange) as NSData!)
                 communicationIntervalData?.getBytes(&self.cgmCommunicationInterval, length: 1)
                 return
-            case ContinuousGlucoseSOCP.Fields.patientHighAlertLevelResponse.rawValue: //9
+            case ContinuousGlucoseSOCP.Fields.glucoseCalibrationValueResponse.rawValue:
+                self.continuousGlucoseCalibration = ContinuousGlucoseCalibration(data: data)
+                return
+            case ContinuousGlucoseSOCP.Fields.patientHighAlertLevelResponse.rawValue:
                 let patientHighAlertLevelData = (data.subdata(with: patientHighAlertLevelRange) as NSData!)
                 patientHighAlertLevelData?.getBytes(&self.patientHighAlertLevel, length: 2)
                 return

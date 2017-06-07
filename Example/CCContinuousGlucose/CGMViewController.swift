@@ -125,6 +125,23 @@ class CGMViewController: UITableViewController {
         super.didMove(toParentViewController: parent)
     }
     
+    func showGlucoseCalibrationInformation() {
+        var calibrationStr: String?
+        if ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.continuousGlucoseCalibration != nil {
+        calibrationStr = "Glucose Concentration: \(String(describing: ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.continuousGlucoseCalibration.calibrationValue!))mg/dl\n\r" +
+        "Calibration Time: \(String(describing: ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.continuousGlucoseCalibration.calibrationTime!))min\n\r" +
+        "Type: \(String(describing: ContinuousGlucose.CGMTypes(rawValue: ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.continuousGlucoseCalibration.calibrationType!)!.description))\n\r" +
+        "Location: \(String(describing: ContinuousGlucose.CGMSampleLocations(rawValue: ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.continuousGlucoseCalibration.calibrationLocation!)!.description))\n\r" +
+        "Next Calibration Time: \(String(describing: ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.continuousGlucoseCalibration.nextCalibrationTime!))min\n\r" +
+        "Data Record Number: \(String(describing: ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.continuousGlucoseCalibration.calibrationDataRecordNumber!))"
+        }
+        
+        let alertController = UIAlertController(title: "Calibration Information", message: calibrationStr, preferredStyle: .actionSheet)
+        let OKAction = UIAlertAction(title: "OK", style: .default)
+        alertController.addAction(OKAction)
+        self.present(alertController, animated: true)
+    }
+
     // MARK: table source methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionType = Section(rawValue: section)
@@ -214,10 +231,10 @@ class CGMViewController: UITableViewController {
                 }
             }
         case Section.cgmType.rawValue:
-            cell.textLabel!.text = ContinuousGlucoseFeatures.CMGTypes(rawValue: continuousGlucoseFeatures.cgmType!)!.description
+            cell.textLabel!.text =  ContinuousGlucose.CGMTypes(rawValue: continuousGlucoseFeatures.cgmType!)!.description
             cell.detailTextLabel!.text = "type"
         case Section.cgmSampleLocation.rawValue:
-            cell.textLabel!.text = ContinuousGlucoseFeatures.CGMSampleLocations(rawValue: continuousGlucoseFeatures.cgmSampleLocation!)!.description
+            cell.textLabel!.text =  ContinuousGlucose.CGMSampleLocations(rawValue: continuousGlucoseFeatures.cgmSampleLocation!)!.description
             cell.detailTextLabel!.text = "location"
         case Section.timeOffset.rawValue:
             cell.textLabel!.text = continuousGlucoseStatus.timeOffset.description
@@ -240,7 +257,7 @@ class CGMViewController: UITableViewController {
                     cell.textLabel!.text = ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.cgmCommunicationInterval.description
                     cell.detailTextLabel!.text = "communication interval (minutes)"
                 case Section.SpecificOpsControlPoint.getGlucoseCalibrationValue.rawValue:
-                    cell.textLabel!.text = "N/A"
+                    cell.textLabel!.text = "Tap for more information"
                     cell.detailTextLabel!.text = "glucose calibration value"
                 case Section.SpecificOpsControlPoint.getPatientHighAlertLevel.rawValue:
                     cell.textLabel!.text = ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.patientHighAlertLevel.description
@@ -359,6 +376,12 @@ class CGMViewController: UITableViewController {
         if indexPath.section == Section.session.rawValue {
             ContinuousGlucose.sharedInstance().prepareSession()
             performSegue(withIdentifier: "segueToSession", sender: self)
+        }
+        
+        if indexPath.section == Section.specificOpsControlPoint.rawValue {
+            if indexPath.row == Section.SpecificOpsControlPoint.getGlucoseCalibrationValue.rawValue {
+                self.showGlucoseCalibrationInformation()
+            }
         }
     }
 

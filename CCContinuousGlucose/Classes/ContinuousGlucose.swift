@@ -61,6 +61,81 @@ public class ContinuousGlucose : NSObject {
     
     public var sessionRunTimeDataRange = NSRange(location:0, length: 2)
     
+    
+    @objc public enum CGMTypes : Int {
+        case reserved = 0,
+        capillaryWholeblood,
+        capillaryPlasma,
+        venousWholeBlood,
+        venousPlasma,
+        arterialWholeBlood,
+        arterialPlasma,
+        undeterminedWholeBlood,
+        undeterminedPlasma,
+        interstitialFluid,
+        controlSolution
+        
+        public var description: String {
+            switch self {
+            case .capillaryWholeblood:
+                return NSLocalizedString("Capillary Wholeblood", comment:"")
+            case .capillaryPlasma:
+                return NSLocalizedString("Capillary Plasma", comment:"")
+            case .venousWholeBlood:
+                return NSLocalizedString("Venous Whole Blood", comment:"")
+            case .venousPlasma:
+                return NSLocalizedString("Venous Plasma", comment:"")
+            case .arterialWholeBlood:
+                return NSLocalizedString("Arterial Whole Blood", comment:"")
+            case .arterialPlasma:
+                return NSLocalizedString("Arterial Plasma", comment:"")
+            case .undeterminedWholeBlood:
+                return NSLocalizedString("Undetermined Whole Blood", comment:"")
+            case .undeterminedPlasma:
+                return NSLocalizedString("Undetermined Plasma", comment:"")
+            case .interstitialFluid:
+                return NSLocalizedString("Interstitial Fluid", comment:"")
+            case .controlSolution:
+                return NSLocalizedString("Control Solution", comment:"")
+            case .reserved:
+                return NSLocalizedString("Reserved", comment:"")
+            }
+        }
+        
+        static let allValues = [reserved, capillaryWholeblood, capillaryPlasma, venousWholeBlood, venousPlasma, arterialWholeBlood, arterialPlasma, undeterminedWholeBlood, undeterminedPlasma, interstitialFluid, controlSolution]
+    }
+    
+    @objc public enum CGMSampleLocations : Int {
+        case reserved = 0,
+        finger,
+        alternateSiteTest,
+        earlobe,
+        controlSolution,
+        subcutaneousTissue,
+        sampleLocationValueNotAvailable
+        
+        public var description: String {
+            switch self {
+            case .finger:
+                return NSLocalizedString("Finger", comment:"")
+            case .alternateSiteTest:
+                return NSLocalizedString("Alternate Site Test", comment:"")
+            case .earlobe:
+                return NSLocalizedString("Earlobe", comment:"")
+            case .controlSolution:
+                return NSLocalizedString("Control Solution", comment:"")
+            case .subcutaneousTissue:
+                return NSLocalizedString("Subcutaneous Tissue", comment:"")
+            case .sampleLocationValueNotAvailable:
+                return NSLocalizedString("Sample Location Value Not Available", comment:"")
+            case .reserved:
+                return NSLocalizedString("Reserved", comment:"")
+            }
+        }
+        
+        static let allValues = [reserved, finger, alternateSiteTest, earlobe, controlSolution, subcutaneousTissue, sampleLocationValueNotAvailable]
+    }
+    
     public class func sharedInstance() -> ContinuousGlucose {
         if thisContinuousGlucose == nil {
             thisContinuousGlucose = ContinuousGlucose()
