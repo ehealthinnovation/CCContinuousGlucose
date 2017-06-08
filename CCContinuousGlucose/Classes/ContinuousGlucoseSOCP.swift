@@ -11,15 +11,15 @@ import CoreBluetooth
 import CCBluetooth
 
 public class ContinuousGlucoseSOCP : NSObject {
-    private var socpResponseOpCodeRange = NSRange(location:0, length: 1)
+    private let socpResponseOpCodeRange = NSRange(location:0, length: 1)
     
-    private var cgmCommunicationIntervalRange = NSRange(location:1, length: 1)
-    private var patientHighAlertLevelRange = NSRange(location:1, length: 2)
-    private var patientLowAlertLevelRange = NSRange(location:1, length: 2)
-    private var hypoAlertLevelRange = NSRange(location:1, length: 2)
-    private var hyperAlertLevelRange = NSRange(location:1, length: 2)
-    private var rateOfDecreaseAlertLevelRange = NSRange(location:1, length: 2)
-    private var rateOfIncreaseAlertLevelRange = NSRange(location:1, length: 2)
+    private let cgmCommunicationIntervalRange = NSRange(location:1, length: 1)
+    private let patientHighAlertLevelRange = NSRange(location:1, length: 2)
+    private let patientLowAlertLevelRange = NSRange(location:1, length: 2)
+    private let hypoAlertLevelRange = NSRange(location:1, length: 2)
+    private let hyperAlertLevelRange = NSRange(location:1, length: 2)
+    private let rateOfDecreaseAlertLevelRange = NSRange(location:1, length: 2)
+    private let rateOfIncreaseAlertLevelRange = NSRange(location:1, length: 2)
     
     public var cgmCommunicationInterval: Int  = 0
     public var patientHighAlertLevel: UInt16 = 0

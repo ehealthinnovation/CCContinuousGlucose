@@ -31,26 +31,26 @@ public class ContinuousGlucoseAnnunciation : NSObject {
     public var sensorResultLowerThanTheDeviceCanProcess: Bool?
     public var sensorResultHigherThanTheDeviceCanProcess: Bool?
     
-    private var sessionStoppedBit = 0
-    private var deviceBatteryLowBit = 1
-    private var sensorTypeIncorrectForDeviceBit = 2
-    private var sensorMalfunctionBit = 3
-    private var deviceSpecificAlertBit = 4
-    private var generalDeviceFaultHasOccurredInTheSensorBit = 5
-    private var timeSynchronizationBetweenSensorAndCollectorRequiredBit = 8
-    private var calibrationNotAllowedBit = 9
-    private var calibrationRecommendedBit = 10
-    private var calibrationRequiredBit = 11
-    private var sensorTemperatureTooHighForValidTestResultAtTimeOfMeasurementBit = 12
-    private var sensorTemperatureTooLowForValidTestResultAtTimeOfMeasurementBit = 13
-    private var sensorResultLowerThanThePatientLowLevelBit = 16
-    private var sensorResultHigherThanThePatientHighLevelBit = 17
-    private var sensorResultLowerThanTheHypoLevelBit = 18
-    private var sensorResultHigherThanTheHyperLevelBit = 19
-    private var sensorRateOfDecreaseExceededBit = 20
-    private var sensorRateOfIncreaseExceededBit = 21
-    private var sensorResultLowerThanTheDeviceCanProcessBit = 22
-    private var sensorResultHigherThanTheDeviceCanProcessBit = 23
+    private let sessionStoppedBit = 0
+    private let deviceBatteryLowBit = 1
+    private let sensorTypeIncorrectForDeviceBit = 2
+    private let sensorMalfunctionBit = 3
+    private let deviceSpecificAlertBit = 4
+    private let generalDeviceFaultHasOccurredInTheSensorBit = 5
+    private let timeSynchronizationBetweenSensorAndCollectorRequiredBit = 8
+    private let calibrationNotAllowedBit = 9
+    private let calibrationRecommendedBit = 10
+    private let calibrationRequiredBit = 11
+    private let sensorTemperatureTooHighForValidTestResultAtTimeOfMeasurementBit = 12
+    private let sensorTemperatureTooLowForValidTestResultAtTimeOfMeasurementBit = 13
+    private let sensorResultLowerThanThePatientLowLevelBit = 16
+    private let sensorResultHigherThanThePatientHighLevelBit = 17
+    private let sensorResultLowerThanTheHypoLevelBit = 18
+    private let sensorResultHigherThanTheHyperLevelBit = 19
+    private let sensorRateOfDecreaseExceededBit = 20
+    private let sensorRateOfIncreaseExceededBit = 21
+    private let sensorResultLowerThanTheDeviceCanProcessBit = 22
+    private let sensorResultHigherThanTheDeviceCanProcessBit = 23
     
     @objc public enum Annunciation : Int {
         case sessionStopped = 0,

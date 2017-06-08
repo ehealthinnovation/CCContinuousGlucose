@@ -13,7 +13,7 @@ public class ContinuousGlucoseStatus : NSObject {
     public var timeOffset: UInt16 = 0
     public var status: ContinuousGlucoseAnnunciation!
     public var e2eCRC: UInt16 = 0
-    private var annunciationDataRange = NSRange(location:2, length: 3)
+    private let annunciationDataRange = NSRange(location:2, length: 3)
     
     init(data: NSData?) {
         super.init()

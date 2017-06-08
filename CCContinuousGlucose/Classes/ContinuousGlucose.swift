@@ -59,7 +59,7 @@ public class ContinuousGlucose : NSObject {
     public var serialNumber : String?
     public var firmwareVersion : String?
     
-    public var sessionRunTimeDataRange = NSRange(location:0, length: 2)
+    public let sessionRunTimeDataRange = NSRange(location:0, length: 2)
     
     
     @objc public enum CGMTypes : Int {

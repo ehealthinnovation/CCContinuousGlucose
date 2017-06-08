@@ -30,25 +30,25 @@ public class ContinuousGlucoseFeatures : NSObject {
     public var cgmType: Int?
     public var cgmSampleLocation: Int?
     
-    private var calibrationSupportedBit = 0
-    private var patientHighLowAlertsSupportedBit = 1
-    private var hypoAlertsSupportedBit = 2
-    private var hyperAlertsSupportedBit = 3
-    private var rateOfIncreaseDecreaseAlertsSupportedBit = 4
-    private var deviceSpecificAlertSupportedBit = 5
-    private var sensorMalfunctionDetectionSupportedBit = 6
-    private var sensorTemperatureHighLowDetectionSupportedBit = 7
-    private var sensorResultHighLowDetectionSupportedBit = 8
-    private var lowBatteryDetectionSupportedBit = 9
-    private var sensorTypeErrorDetectionSupportedBit = 10
-    private var generalDeviceFaultSupportedBit = 11
-    private var e2eCRCSupportedBit = 12
-    private var multipleBondSupportedBit = 13
-    private var multipleSessionsSupportedBit = 14
-    private var cgmTrendInformationSupportedBit = 15
-    private var cgmQualitySupportedBit = 16
+    private let calibrationSupportedBit = 0
+    private let patientHighLowAlertsSupportedBit = 1
+    private let hypoAlertsSupportedBit = 2
+    private let hyperAlertsSupportedBit = 3
+    private let rateOfIncreaseDecreaseAlertsSupportedBit = 4
+    private let deviceSpecificAlertSupportedBit = 5
+    private let sensorMalfunctionDetectionSupportedBit = 6
+    private let sensorTemperatureHighLowDetectionSupportedBit = 7
+    private let sensorResultHighLowDetectionSupportedBit = 8
+    private let lowBatteryDetectionSupportedBit = 9
+    private let sensorTypeErrorDetectionSupportedBit = 10
+    private let generalDeviceFaultSupportedBit = 11
+    private let e2eCRCSupportedBit = 12
+    private let multipleBondSupportedBit = 13
+    private let multipleSessionsSupportedBit = 14
+    private let cgmTrendInformationSupportedBit = 15
+    private let cgmQualitySupportedBit = 16
     
-    private var cgmTypeAndSampleLocationRange = NSRange(location:3, length: 1)
+    private let cgmTypeAndSampleLocationRange = NSRange(location:3, length: 1)
     
     
     @objc public enum Features : Int {

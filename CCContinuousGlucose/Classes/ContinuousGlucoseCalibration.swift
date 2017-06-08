@@ -10,12 +10,12 @@ import Foundation
 import CCToolbox
 
 public class ContinuousGlucoseCalibration : NSObject {
-    private var calibrationValueRange = NSRange(location:1, length: 2)
-    private var calibrationTimeRange = NSRange(location:3, length: 2)
-    private var calibrationTypeAndSampleLocationRange = NSRange(location:5, length: 1)
-    private var nextCalibrationTimeRange = NSRange(location:6, length: 2)
-    private var calibrationDataRecordNumberRange = NSRange(location:8, length: 2)
-    private var calibrationStatusRange = NSRange(location:10, length: 1)
+    private let calibrationValueRange = NSRange(location:1, length: 2)
+    private let calibrationTimeRange = NSRange(location:3, length: 2)
+    private let calibrationTypeAndSampleLocationRange = NSRange(location:5, length: 1)
+    private let nextCalibrationTimeRange = NSRange(location:6, length: 2)
+    private let calibrationDataRecordNumberRange = NSRange(location:8, length: 2)
+    private let calibrationStatusRange = NSRange(location:10, length: 1)
     
     public var calibrationValue: Float?
     public var calibrationTime: Int?

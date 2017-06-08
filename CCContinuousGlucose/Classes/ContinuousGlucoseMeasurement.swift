@@ -22,18 +22,18 @@ public class ContinuousGlucoseMeasurement : NSObject {
     public var trendValue: Float = 0
     public var quality: Float = 0
     
-    private var flagsRange = NSRange(location:1, length: 1)
-    private var glucoseConcentrationRange = NSRange(location:2, length: 2)
-    private var timeOffsetRange = NSRange(location:4, length: 2)
-    private var annunciationRange = NSRange(location:6, length: 1)
-    private var trendRange = NSRange(location:7, length: 2)
-    private var qualityRange = NSRange(location:9, length: 2)
+    private let flagsRange = NSRange(location:1, length: 1)
+    private let glucoseConcentrationRange = NSRange(location:2, length: 2)
+    private let timeOffsetRange = NSRange(location:4, length: 2)
+    private let annunciationRange = NSRange(location:6, length: 1)
+    private let trendRange = NSRange(location:7, length: 2)
+    private let qualityRange = NSRange(location:9, length: 2)
     
-    private var cgmTrendInformationPresentBit = 0
-    private var cgmQualityPresentBit = 1
-    private var sensorStatusAnnunciationFieldWarningOctetPresentBit = 5
-    private var sensorStatusAnnunciationFieldCalTempOctetPresentBit = 6
-    private var sensorStatusAnnunciationFieldStatusOctetPresentBit = 7
+    private let cgmTrendInformationPresentBit = 0
+    private let cgmQualityPresentBit = 1
+    private let sensorStatusAnnunciationFieldWarningOctetPresentBit = 5
+    private let sensorStatusAnnunciationFieldCalTempOctetPresentBit = 6
+    private let sensorStatusAnnunciationFieldStatusOctetPresentBit = 7
 
     
     init(data: NSData?) {
