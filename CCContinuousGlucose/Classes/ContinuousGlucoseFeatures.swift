@@ -10,6 +10,7 @@ import Foundation
 import CCToolbox
 
 public class ContinuousGlucoseFeatures : NSObject {
+    public var packetData: NSData?
     public var calibrationSupported: Bool?
     public var patientHighLowAlertsSupported: Bool?
     public var hypoAlertsSupported: Bool?
@@ -115,6 +116,8 @@ public class ContinuousGlucoseFeatures : NSObject {
     
     init(data: NSData?) {
         super.init()
+        
+        self.packetData = data
         
         var featureBits:Int = 0
         data?.getBytes(&featureBits, length: 3)

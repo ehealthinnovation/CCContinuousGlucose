@@ -45,7 +45,7 @@ public class ContinuousGlucose : NSObject {
     public var continuousGlucoseStatus: ContinuousGlucoseStatus!
     public var continuousGlucoseSOCP: ContinuousGlucoseSOCP!
     public var continuousGlucoseSessionRunTime: ContinuousGlucoseSessionRunTime!
-    public var sessionStartTime: String?
+    public var sessionStartTime: Date?
 
     var bluetoothDateTime: BluetoothDateTime!
     var peripheralNameToConnectTo : String?
@@ -261,6 +261,12 @@ public class ContinuousGlucose : NSObject {
         return str
     }
     
+    public func getSessionStartTime() {
+        if let characteristic = peripheral?.findCharacteristicByUUID(CGMSessionStartTimeCharacteristic) {
+            self.peripheral?.readValue(for: characteristic)
+        }
+    }
+    
     public func setSessionStartTime() {
         let timeData = self.stringFromDate(date: Date()).dataFromHexadecimalString()
         var timeZoneInt = self.bluetoothDateTime.timeZone()
@@ -278,7 +284,7 @@ public class ContinuousGlucose : NSObject {
         
         if let characteristic = peripheral?.findCharacteristicByUUID(CGMSessionStartTimeCharacteristic) {
             self.writeCharacteristic(characteristic: characteristic, data: timeData! as Data)
-            self.peripheral?.readValue(for: characteristic)
+            //self.peripheral?.readValue(for: characteristic)
         }
     }
     
@@ -293,7 +299,7 @@ public class ContinuousGlucose : NSObject {
         setHypoAlertLevel(level: 90)
         setRateOfDecreaseAlertLevel(glucoseConcentration: -1.0)
         setRateOfIncreaseAlertLevel(glucoseConcentration: 1.0)
-        startSession()
+        getSessionStartTime()
     }
     
     public func stopSession() {

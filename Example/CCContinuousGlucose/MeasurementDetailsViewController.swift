@@ -21,10 +21,14 @@ class MeasurementDetailsViewController: UITableViewController {
     @IBOutlet weak var doneButton: UIBarButtonItem!
     
     enum Section: Int {
-        case details, annunciation, count
+        case data, fhir, details, annunciation, count
         
         public func description() -> String {
             switch self {
+            case .data:
+                return "data"
+            case .fhir:
+                return "fhir"
             case .details:
                 return "details"
             case .annunciation:
@@ -36,6 +40,10 @@ class MeasurementDetailsViewController: UITableViewController {
         
         public func rowCount() -> Int {
             switch self {
+            case .data:
+                return 1
+            case .fhir:
+                return 2
             case .details:
                 return 4
             case .annunciation:
@@ -43,6 +51,10 @@ class MeasurementDetailsViewController: UITableViewController {
             case .count:
                 fatalError("invalid")
             }
+        }
+        
+        enum Fhir: Int {
+            case existsOnFhir, FhirID, count
         }
         
         enum Details: Int {
@@ -69,10 +81,27 @@ class MeasurementDetailsViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath as IndexPath) as UITableViewCell
     
         switch indexPath.section {
+        case Section.data.rawValue:
+            cell.textLabel!.text = glucoseMeasurement.packetData?.toHexString()
+            cell.detailTextLabel!.text = "raw packet"
+            
+        case Section.fhir.rawValue:
+            switch indexPath.row {
+            case Section.Fhir.existsOnFhir.rawValue:
+                cell.textLabel!.text = glucoseMeasurement.existsOnFHIR.description
+                cell.detailTextLabel!.text = "exists on fhir"
+            case Section.Fhir.FhirID.rawValue:
+                cell.textLabel!.text = glucoseMeasurement.fhirID?.description
+                cell.detailTextLabel!.text = "fhir id"
+            default:
+                print("")
+            }
+            
         case Section.details.rawValue:
             switch indexPath.row {
             case Section.Details.glucoseConcentration.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.glucoseConcentration.description
+                let mmolString = String(describing: CGMFhir.CGMFhirInstance.truncateMeasurement(measurementValue: glucoseMeasurement.toMMOL()!))
+                cell.textLabel!.text = "\(glucoseMeasurement.glucoseConcentration.description) mg/dL (\(mmolString) mmol/L)"
                 cell.detailTextLabel!.text = "glucose concentration"
             case Section.Details.timeOffset.rawValue:
                 cell.textLabel!.text = glucoseMeasurement.timeOffset.description

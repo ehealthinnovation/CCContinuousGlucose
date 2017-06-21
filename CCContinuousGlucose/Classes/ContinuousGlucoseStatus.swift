@@ -10,6 +10,7 @@ import Foundation
 import CCToolbox
 
 public class ContinuousGlucoseStatus : NSObject {
+    public var packetData: NSData?
     public var timeOffset: UInt16 = 0
     public var status: ContinuousGlucoseAnnunciation!
     public var e2eCRC: UInt16 = 0
@@ -17,6 +18,7 @@ public class ContinuousGlucoseStatus : NSObject {
     
     init(data: NSData?) {
         super.init()
+        self.packetData = data
         updateStatus(data: data)
     }
     

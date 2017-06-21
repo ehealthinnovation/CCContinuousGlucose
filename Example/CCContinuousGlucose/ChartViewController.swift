@@ -150,7 +150,10 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
     
     //MARK
     func continuousGlucoseMeasurement(measurement: ContinuousGlucoseMeasurement) {
+        measurement.existsOnFHIR = false
         glucoseMeasurements.append(measurement)
         updateLineChart()
+        
+        CGMFhir.CGMFhirInstance.uploadSingleMeasurement(measurement: measurement)
     }
 }
