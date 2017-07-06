@@ -154,6 +154,8 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
         glucoseMeasurements.append(measurement)
         updateLineChart()
         
-        CGMFhir.CGMFhirInstance.uploadSingleMeasurement(measurement: measurement)
+        if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
+            CGMFhir.CGMFhirInstance.uploadSingleMeasurement(measurement: measurement)
+        }
     }
 }

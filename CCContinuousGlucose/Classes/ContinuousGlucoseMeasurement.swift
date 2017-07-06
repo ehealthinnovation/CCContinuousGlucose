@@ -19,7 +19,7 @@ public class ContinuousGlucoseMeasurement : NSObject {
     public var sensorStatusAnnunciationFieldStatusOctetPresent: Bool?
     public var glucoseConcentration: Float = 0
     public var timeOffset: UInt16 = 0
-    public var status: ContinuousGlucoseAnnunciation!
+    public var status: ContinuousGlucoseAnnunciation?
     public var trendValue: Float = 0
     public var quality: Float = 0
     
@@ -41,7 +41,6 @@ public class ContinuousGlucoseMeasurement : NSObject {
     init(data: NSData?) {
         super.init()
         
-        print("data: \(String(describing: data))")
         self.packetData = data
         parseFlags(flags:(data?.subdata(with: flagsRange) as NSData!))
         parseGlucoseConcentration(data:(data?.subdata(with: glucoseConcentrationRange) as NSData!))
@@ -53,7 +52,10 @@ public class ContinuousGlucoseMeasurement : NSObject {
         
         let annunciationRange = NSRange(location: annunciationLocation, length: annunciationFieldSize)
         if annunciationFieldSize > 0 {
+            print("annunciation: present")
             parseAnnunciation(data:(data?.subdata(with: annunciationRange) as NSData!))
+        } else {
+            print("annunciation: not present")
         }
         
         if self.cgmTrendInformationPresent! {

@@ -187,7 +187,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="obz-06-mTW">
-                        <barButtonItem key="rightBarButtonItem" title="Discover FHIR Servers" id="r2t-wO-eGc">
+                        <barButtonItem key="rightBarButtonItem" title="Select FHIR Server" id="r2t-wO-eGc">
                             <connections>
                                 <action selector="discoverFHIRServersButtonAction:" destination="ufw-Qc-Q6u" id="FNt-xt-4Ii"/>
                             </connections>

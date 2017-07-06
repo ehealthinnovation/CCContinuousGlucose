@@ -118,64 +118,64 @@ class MeasurementDetailsViewController: UITableViewController {
         case Section.annunciation.rawValue:
             switch indexPath.row {
             case ContinuousGlucoseAnnunciation.Annunciation.sessionStopped.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sessionStopped?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sessionStopped?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sessionStopped.description
             case ContinuousGlucoseAnnunciation.Annunciation.deviceBatteryLow.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.deviceBatteryLow?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.deviceBatteryLow?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.deviceBatteryLow.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorTypeIncorrectForDevice.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorTypeIncorrectForDevice?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorTypeIncorrectForDevice?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorTypeIncorrectForDevice.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorMalfunction.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorMalfunction?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorMalfunction?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorMalfunction.description
             case ContinuousGlucoseAnnunciation.Annunciation.deviceSpecificAlert.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.deviceSpecificAlert?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.deviceSpecificAlert?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.deviceSpecificAlert.description
             case ContinuousGlucoseAnnunciation.Annunciation.generalDeviceFaultHasOccurredInTheSensor.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.generalDeviceFaultHasOccurredInTheSensor?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.generalDeviceFaultHasOccurredInTheSensor?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.generalDeviceFaultHasOccurredInTheSensor.description
             case ContinuousGlucoseAnnunciation.Annunciation.timeSynchronizationBetweenSensorAndCollectorRequired.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.timeSynchronizationBetweenSensorAndCollectorRequired?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.timeSynchronizationBetweenSensorAndCollectorRequired?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.timeSynchronizationBetweenSensorAndCollectorRequired.description
             case ContinuousGlucoseAnnunciation.Annunciation.calibrationNotAllowed.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.calibrationNotAllowed?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.calibrationNotAllowed?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.calibrationNotAllowed.description
             case ContinuousGlucoseAnnunciation.Annunciation.calibrationRecommended.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.calibrationRecommended?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.calibrationRecommended?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.calibrationRecommended.description
             case ContinuousGlucoseAnnunciation.Annunciation.calibrationRequired.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.calibrationRequired?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.calibrationRequired?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.calibrationRequired.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorTemperatureTooHighForValidTestResultAtTimeOfMeasurement.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorTemperatureTooHighForValidTestResultAtTimeOfMeasurement?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorTemperatureTooHighForValidTestResultAtTimeOfMeasurement?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorTemperatureTooHighForValidTestResultAtTimeOfMeasurement.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorTemperatureTooLowForValidTestResultAtTimeOfMeasurement.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorTemperatureTooLowForValidTestResultAtTimeOfMeasurement?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorTemperatureTooLowForValidTestResultAtTimeOfMeasurement?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorTemperatureTooLowForValidTestResultAtTimeOfMeasurement.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorResultLowerThanThePatientLowLevel.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorResultLowerThanThePatientLowLevel?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorResultLowerThanThePatientLowLevel?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorResultLowerThanThePatientLowLevel.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorResultHigherThanThePatientHighLevel.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorResultHigherThanThePatientHighLevel?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorResultHigherThanThePatientHighLevel?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorResultHigherThanThePatientHighLevel.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorResultLowerThanTheHypoLevel.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorResultLowerThanTheHypoLevel?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorResultLowerThanTheHypoLevel?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorResultLowerThanTheHypoLevel.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorResultHigherThanTheHyperLevel.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorResultHigherThanTheHyperLevel?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorResultHigherThanTheHyperLevel?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorResultHigherThanTheHyperLevel.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorRateOfDecreaseExceeded.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorRateOfDecreaseExceeded?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorRateOfDecreaseExceeded?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorRateOfDecreaseExceeded.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorRateOfIncreaseExceeded.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorRateOfIncreaseExceeded?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorRateOfIncreaseExceeded?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorRateOfIncreaseExceeded.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorResultLowerThanTheDeviceCanProcess.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorResultLowerThanTheDeviceCanProcess?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorResultLowerThanTheDeviceCanProcess?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorResultLowerThanTheDeviceCanProcess.description
             case ContinuousGlucoseAnnunciation.Annunciation.sensorResultHigherThanTheDeviceCanProcess.rawValue:
-                cell.textLabel!.text = glucoseMeasurement.status.sensorResultHigherThanTheDeviceCanProcess?.description
+                cell.textLabel!.text = glucoseMeasurement.status?.sensorResultHigherThanTheDeviceCanProcess?.description
                 cell.detailTextLabel!.text = ContinuousGlucoseAnnunciation.Annunciation.sensorResultHigherThanTheDeviceCanProcess.description
             default:
                 cell.textLabel!.text = ""

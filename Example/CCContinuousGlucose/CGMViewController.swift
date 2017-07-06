@@ -155,6 +155,20 @@ class CGMViewController: UITableViewController {
         self.present(alertController, animated: true)
     }
 
+    public func prepareSession() {
+        ContinuousGlucose.sharedInstance().resetDeviceSpecificAlert()
+        ContinuousGlucose.sharedInstance().setSessionStartTime()
+        ContinuousGlucose.sharedInstance().setCommunicationInterval(minutes: 1)
+        ContinuousGlucose.sharedInstance().setGlucoseCalibrationValue(glucoseConcentration: 120, calibrationTime: 10, type: 1, location: 1)
+        ContinuousGlucose.sharedInstance().setPatientHighAlertLevel(level: 280)
+        ContinuousGlucose.sharedInstance().setPatientLowAlertLevel(level: 100)
+        ContinuousGlucose.sharedInstance().setHyperAlertLevel(level: 300)
+        ContinuousGlucose.sharedInstance().setHypoAlertLevel(level: 90)
+        ContinuousGlucose.sharedInstance().setRateOfDecreaseAlertLevel(glucoseConcentration: -1.0)
+        ContinuousGlucose.sharedInstance().setRateOfIncreaseAlertLevel(glucoseConcentration: 1.0)
+        ContinuousGlucose.sharedInstance().getSessionStartTime()
+    }
+
     // MARK: table source methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionType = Section(rawValue: section)
@@ -169,11 +183,15 @@ class CGMViewController: UITableViewController {
         case Section.patient.rawValue:
             cell.textLabel!.text = "Given Name: \(CGMFhir.CGMFhirInstance.givenName)\nFamily Name: \(CGMFhir.CGMFhirInstance.familyName)"
             if CGMFhir.CGMFhirInstance.patient != nil {
-                cell.detailTextLabel!.text = "Patient FHIR ID: " + (CGMFhir.CGMFhirInstance.patient?.id)!
+                cell.detailTextLabel!.text = String(describing: "Patient FHIR ID: \(String(describing: CGMFhir.CGMFhirInstance.patient!.id!))")
                 cell.accessoryView = nil
                 cell.accessoryType = .disclosureIndicator
             } else {
-                cell.detailTextLabel!.text = "Patient: Tap to upload"
+                if FHIR.fhirInstance.fhirServerAddress.isEmpty {
+                    cell.detailTextLabel!.text = ""
+                } else {
+                    cell.detailTextLabel!.text = "Patient: Tap to upload"
+                }
             }
         case Section.device.rawValue:
             if let manufacturer = ContinuousGlucose.sharedInstance().manufacturerName?.description {
@@ -183,93 +201,99 @@ class CGMViewController: UITableViewController {
                 cell.textLabel?.text?.append("\nModel: \(modelNumber)")
             }
             if CGMFhir.CGMFhirInstance.device != nil {
-                cell.detailTextLabel!.text = "Device FHIR ID: " + (CGMFhir.CGMFhirInstance.device?.id)!
+                cell.detailTextLabel!.text = String(describing: "Device FHIR ID: \(String(describing: CGMFhir.CGMFhirInstance.device!.id!))")
                 cell.accessoryView = nil
                 cell.accessoryType = .disclosureIndicator
             } else {
-                cell.detailTextLabel!.text = "Device: Tap to upload"
+                if FHIR.fhirInstance.fhirServerAddress.isEmpty {
+                    cell.detailTextLabel!.text = ""
+                } else {
+                    cell.detailTextLabel!.text = "Device: Tap to upload"
+                }
             }
         case Section.features.rawValue:
             if continuousGlucoseFeatures != nil {
                 switch indexPath.row {
-                case ContinuousGlucoseFeatures.Features.calibrationSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.calibrationSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.calibrationSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.patientHighLowAlertsSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.patientHighLowAlertsSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.patientHighLowAlertsSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.hypoAlertsSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.hypoAlertsSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.hypoAlertsSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.hyperAlertsSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.hyperAlertsSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.hyperAlertsSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.rateOfIncreaseDecreaseAlertsSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.rateOfIncreaseDecreaseAlertsSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.rateOfIncreaseDecreaseAlertsSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.deviceSpecificAlertSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.deviceSpecificAlertSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.deviceSpecificAlertSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.sensorMalfunctionDetectionSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.sensorMalfunctionDetectionSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.sensorMalfunctionDetectionSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.sensorTemperatureHighLowDetectionSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.sensorTemperatureHighLowDetectionSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.sensorTemperatureHighLowDetectionSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.sensorResultHighLowDetectionSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.sensorResultHighLowDetectionSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.sensorResultHighLowDetectionSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.lowBatteryDetectionSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.lowBatteryDetectionSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.lowBatteryDetectionSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.sensorTypeErrorDetectionSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.sensorTypeErrorDetectionSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.sensorTypeErrorDetectionSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.generalDeviceFaultSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.generalDeviceFaultSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.generalDeviceFaultSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.e2eCRCSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.e2eCRCSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.e2eCRCSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.multipleBondSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.multipleBondSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.multipleBondSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.multipleSessionsSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.multipleSessionsSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.multipleSessionsSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.cgmTrendInformationSupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.cgmTrendInformationSupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.cgmTrendInformationSupported.description
-                    cell.accessoryType = .none
-                case ContinuousGlucoseFeatures.Features.cgmQualitySupported.rawValue:
-                    cell.textLabel!.text = continuousGlucoseFeatures.cgmQualitySupported?.description
-                    cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.cgmQualitySupported.description
-                    cell.accessoryType = .none
-                default:
-                    print("")
+                    case ContinuousGlucoseFeatures.Features.calibrationSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.calibrationSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.calibrationSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.patientHighLowAlertsSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.patientHighLowAlertsSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.patientHighLowAlertsSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.hypoAlertsSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.hypoAlertsSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.hypoAlertsSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.hyperAlertsSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.hyperAlertsSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.hyperAlertsSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.rateOfIncreaseDecreaseAlertsSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.rateOfIncreaseDecreaseAlertsSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.rateOfIncreaseDecreaseAlertsSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.deviceSpecificAlertSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.deviceSpecificAlertSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.deviceSpecificAlertSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.sensorMalfunctionDetectionSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.sensorMalfunctionDetectionSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.sensorMalfunctionDetectionSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.sensorTemperatureHighLowDetectionSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.sensorTemperatureHighLowDetectionSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.sensorTemperatureHighLowDetectionSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.sensorResultHighLowDetectionSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.sensorResultHighLowDetectionSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.sensorResultHighLowDetectionSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.lowBatteryDetectionSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.lowBatteryDetectionSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.lowBatteryDetectionSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.sensorTypeErrorDetectionSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.sensorTypeErrorDetectionSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.sensorTypeErrorDetectionSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.generalDeviceFaultSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.generalDeviceFaultSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.generalDeviceFaultSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.e2eCRCSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.e2eCRCSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.e2eCRCSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.multipleBondSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.multipleBondSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.multipleBondSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.multipleSessionsSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.multipleSessionsSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.multipleSessionsSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.cgmTrendInformationSupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.cgmTrendInformationSupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.cgmTrendInformationSupported.description
+                        cell.accessoryType = .none
+                    case ContinuousGlucoseFeatures.Features.cgmQualitySupported.rawValue:
+                        cell.textLabel!.text = continuousGlucoseFeatures.cgmFeature.cgmQualitySupported?.description
+                        cell.detailTextLabel!.text = ContinuousGlucoseFeatures.Features.cgmQualitySupported.description
+                        cell.accessoryType = .none
+                    default:
+                        cell.textLabel!.text = ""
+                        cell.detailTextLabel!.text = ""
+                        cell.accessoryType = .none
                 }
             }
         case Section.cgmType.rawValue:
-            cell.textLabel!.text =  ContinuousGlucose.CGMTypes(rawValue: continuousGlucoseFeatures.cgmType!)!.description
+            cell.textLabel!.text =  ContinuousGlucose.CGMTypes(rawValue: continuousGlucoseFeatures.cgmFeature.cgmType!)!.description
             cell.detailTextLabel!.text = "type"
             cell.accessoryType = .none
         case Section.cgmSampleLocation.rawValue:
-            cell.textLabel!.text =  ContinuousGlucose.CGMSampleLocations(rawValue: continuousGlucoseFeatures.cgmSampleLocation!)!.description
+            cell.textLabel!.text =  ContinuousGlucose.CGMSampleLocations(rawValue: continuousGlucoseFeatures.cgmFeature.cgmSampleLocation!)!.description
             cell.detailTextLabel!.text = "location"
             cell.accessoryType = .none
         case Section.timeOffset.rawValue:
@@ -447,40 +471,57 @@ class CGMViewController: UITableViewController {
         let cell = tableView.cellForRow(at: indexPath)! as UITableViewCell
         
         if indexPath.section == Section.session.rawValue {
-            if CGMFhir.CGMFhirInstance.patient == nil || CGMFhir.CGMFhirInstance.device == nil {
-                self.showAlert(title: "Patient and/or Device not uploaded", message: "Upload patient and/or device first")
-                return
-            }
+            if FHIR.fhirInstance.fhirServerAddress.isEmpty {
+                self.prepareSession()
+                performSegue(withIdentifier: "segueToSession", sender: self)
+            } else {
+                if CGMFhir.CGMFhirInstance.patient == nil || CGMFhir.CGMFhirInstance.device == nil {
+                    self.showAlert(title: "Patient and/or Device not uploaded", message: "Upload patient and/or device first")
+                    return
+                }
 
-            ContinuousGlucose.sharedInstance().prepareSession()
-            performSegue(withIdentifier: "segueToSession", sender: self)
+                self.prepareSession()
+                performSegue(withIdentifier: "segueToSession", sender: self)
+            }
         }
         
         if indexPath.section == Section.patient.rawValue {
-            if (CGMFhir.CGMFhirInstance.patient?.id) != nil {
-                performSegue(withIdentifier: "segueToPatient", sender: self)
-            } else {
-                cell.accessoryView = self.createActivityView()
-                CGMFhir.CGMFhirInstance.createPatient { (patient, error) -> Void in
-                    if error == nil {
-                        print("patient created with id: \(patient.id!)")
-                        self.refreshTable()
-                        self.logEvent(event: "patient created with id: \(patient.id!)")
+            if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
+                if (CGMFhir.CGMFhirInstance.patient?.id) != nil {
+                    performSegue(withIdentifier: "segueToPatient", sender: self)
+                } else {
+                    cell.accessoryView = self.createActivityView()
+                    CGMFhir.CGMFhirInstance.createPatient { (patient, error) -> Void in
+                        if error == nil {
+                            print("patient created with id: \(String(describing: CGMFhir.CGMFhirInstance.patient!.id!))")
+                            self.refreshTable()
+                            self.logEvent(event: "patient created with id: \(String(describing: CGMFhir.CGMFhirInstance.patient!.id!))")
+                        }
                     }
                 }
             }
         }
         
         if indexPath.section == Section.device.rawValue {
-            if (CGMFhir.CGMFhirInstance.device?.id) != nil {
-                performSegue(withIdentifier: "segueToDevice", sender: self)
-            } else {
-                cell.accessoryView = self.createActivityView()
-                CGMFhir.CGMFhirInstance.createDevice { (device, error) -> Void in
-                    if error == nil {
-                        print("device created with id: \(device.id!)")
-                        self.refreshTable()
-                        self.logEvent(event: "device created with id: \(device.id!)")
+            if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
+                if (CGMFhir.CGMFhirInstance.device?.id) != nil {
+                    performSegue(withIdentifier: "segueToDevice", sender: self)
+                } else {
+                    cell.accessoryView = self.createActivityView()
+                    CGMFhir.CGMFhirInstance.createDevice { (device, error) -> Void in
+                        if error == nil {
+                            print("device created with id: \(String(describing: CGMFhir.CGMFhirInstance.device!.id!))")
+                            self.logEvent(event: "device created with id: \(String(describing: CGMFhir.CGMFhirInstance.device!.id!))")
+                            self.refreshTable()
+                            CGMFhir.CGMFhirInstance.createDeviceComponent { (error) -> Void in
+                                if error == nil {
+                                    print("device component created with id: \(String(describing: CGMFhir.CGMFhirInstance.deviceComponent!.id!))")
+                                    self.logEvent(event: "device component created with id: \(String(describing: CGMFhir.CGMFhirInstance.deviceComponent!.id!))")
+                                    self.refreshTable()
+                                    CGMFhir.CGMFhirInstance.createSpecimen()
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -537,10 +578,11 @@ class CGMViewController: UITableViewController {
             self.tableView.reloadData()
         })
         
-        // when refreshing the table, check if the device serial was read. If so, search for device on fhir
         if ContinuousGlucose.sharedInstance().serialNumber?.description != nil {
             DispatchQueue.once(executeToken: "continuousGlucose.refreshTable.runOnce") {
-                self.searchForFHIRResources()
+                if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
+                    self.searchForFHIRResources()
+                }
             }
         }
     }
@@ -597,10 +639,9 @@ extension CGMViewController: ContinuousGlucoseProtocol {
         DispatchQueue.once(executeToken: "continuousGlucose.searchforFHIRResources.runOnce") {
             self.logEvent(event: "searching for patient \(CGMFhir.CGMFhirInstance.givenName) \(CGMFhir.CGMFhirInstance.familyName)")
             
-            CGMFhir.CGMFhirInstance.searchForPatient(given: CGMFhir.CGMFhirInstance.givenName, family: CGMFhir.CGMFhirInstance.familyName) { (bundle, error) -> Void in
+            CGMFhir.CGMFhirInstance.searchForPatient(given: String(describing:  CGMFhir.CGMFhirInstance.givenName), family: String(describing: CGMFhir.CGMFhirInstance.familyName)) { (bundle, error) -> Void in
                 if let error = error {
-                    print("error searching for patient: \(error)")
-                    self.logEvent(event: "error searching for patient")
+                    self.logEvent(event: "error searching for patient: \(error)")
                 }
                 
                 if bundle?.entry != nil {
@@ -613,6 +654,16 @@ extension CGMViewController: ContinuousGlucoseProtocol {
                         
                         if bundle?.entry != nil {
                             self.logEvent(event: "device found")
+                            
+                            CGMFhir.CGMFhirInstance.searchForSpecimen { (bundle, error) -> Void in
+                                if let error = error {
+                                    print("error searching for specimen: \(error)")
+                                }
+                                
+                                if bundle?.entry != nil {
+                                    self.logEvent(event: "specimen found")
+                                }
+                             }
                         } else {
                             self.logEvent(event: "device not found")
                         }

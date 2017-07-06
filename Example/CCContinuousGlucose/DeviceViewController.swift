@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 import SMART
+import CCContinuousGlucose
 
 class DeviceViewController: UITableViewController {
     public var device: Device!

@@ -10,27 +10,6 @@ import Foundation
 import CCToolbox
 
 public class ContinuousGlucoseFeatures : NSObject {
-    public var packetData: NSData?
-    public var calibrationSupported: Bool?
-    public var patientHighLowAlertsSupported: Bool?
-    public var hypoAlertsSupported: Bool?
-    public var hyperAlertsSupported: Bool?
-    public var rateOfIncreaseDecreaseAlertsSupported: Bool?
-    public var deviceSpecificAlertSupported: Bool?
-    public var sensorMalfunctionDetectionSupported: Bool?
-    public var sensorTemperatureHighLowDetectionSupported: Bool?
-    public var sensorResultHighLowDetectionSupported: Bool?
-    public var lowBatteryDetectionSupported: Bool?
-    public var sensorTypeErrorDetectionSupported: Bool?
-    public var generalDeviceFaultSupported: Bool?
-    public var e2eCRCSupported: Bool?
-    public var multipleBondSupported: Bool?
-    public var multipleSessionsSupported: Bool?
-    public var cgmTrendInformationSupported: Bool?
-    public var cgmQualitySupported: Bool?
-    public var cgmType: Int?
-    public var cgmSampleLocation: Int?
-    
     private let calibrationSupportedBit = 0
     private let patientHighLowAlertsSupportedBit = 1
     private let hypoAlertsSupportedBit = 2
@@ -51,6 +30,30 @@ public class ContinuousGlucoseFeatures : NSObject {
     
     private let cgmTypeAndSampleLocationRange = NSRange(location:3, length: 1)
     
+    public struct Feature {
+        public var packetData: NSData?
+        public var calibrationSupported: Bool?
+        public var patientHighLowAlertsSupported: Bool?
+        public var hypoAlertsSupported: Bool?
+        public var hyperAlertsSupported: Bool?
+        public var rateOfIncreaseDecreaseAlertsSupported: Bool?
+        public var deviceSpecificAlertSupported: Bool?
+        public var sensorMalfunctionDetectionSupported: Bool?
+        public var sensorTemperatureHighLowDetectionSupported: Bool?
+        public var sensorResultHighLowDetectionSupported: Bool?
+        public var lowBatteryDetectionSupported: Bool?
+        public var sensorTypeErrorDetectionSupported: Bool?
+        public var generalDeviceFaultSupported: Bool?
+        public var e2eCRCSupported: Bool?
+        public var multipleBondSupported: Bool?
+        public var multipleSessionsSupported: Bool?
+        public var cgmTrendInformationSupported: Bool?
+        public var cgmQualitySupported: Bool?
+        public var cgmType: Int?
+        public var cgmSampleLocation: Int?
+    }
+    
+    public var cgmFeature = Feature()
     
     @objc public enum Features : Int {
         case calibrationSupported = 0,
@@ -117,31 +120,31 @@ public class ContinuousGlucoseFeatures : NSObject {
     init(data: NSData?) {
         super.init()
         
-        self.packetData = data
+        self.cgmFeature.packetData = data
         
         var featureBits:Int = 0
         data?.getBytes(&featureBits, length: 3)
         
-        calibrationSupported = featureBits.bit(calibrationSupportedBit).toBool()
-        patientHighLowAlertsSupported = featureBits.bit(patientHighLowAlertsSupportedBit).toBool()
-        hypoAlertsSupported = featureBits.bit(hypoAlertsSupportedBit).toBool()
-        hyperAlertsSupported = featureBits.bit(hyperAlertsSupportedBit).toBool()
-        rateOfIncreaseDecreaseAlertsSupported = featureBits.bit(rateOfIncreaseDecreaseAlertsSupportedBit).toBool()
-        deviceSpecificAlertSupported = featureBits.bit(deviceSpecificAlertSupportedBit).toBool()
-        sensorMalfunctionDetectionSupported = featureBits.bit(sensorMalfunctionDetectionSupportedBit).toBool()
-        sensorTemperatureHighLowDetectionSupported = featureBits.bit(sensorTemperatureHighLowDetectionSupportedBit).toBool()
-        sensorResultHighLowDetectionSupported = featureBits.bit(sensorResultHighLowDetectionSupportedBit).toBool()
-        lowBatteryDetectionSupported = featureBits.bit(lowBatteryDetectionSupportedBit).toBool()
-        sensorTypeErrorDetectionSupported = featureBits.bit(sensorTypeErrorDetectionSupportedBit).toBool()
-        generalDeviceFaultSupported = featureBits.bit(generalDeviceFaultSupportedBit).toBool()
-        e2eCRCSupported = featureBits.bit(e2eCRCSupportedBit).toBool()
-        multipleBondSupported = featureBits.bit(multipleBondSupportedBit).toBool()
-        multipleSessionsSupported = featureBits.bit(multipleSessionsSupportedBit).toBool()
-        cgmTrendInformationSupported = featureBits.bit(cgmTrendInformationSupportedBit).toBool()
-        cgmQualitySupported = featureBits.bit(cgmQualitySupportedBit).toBool()
+        self.cgmFeature.calibrationSupported = featureBits.bit(calibrationSupportedBit).toBool()
+        self.cgmFeature.patientHighLowAlertsSupported = featureBits.bit(patientHighLowAlertsSupportedBit).toBool()
+        self.cgmFeature.hypoAlertsSupported = featureBits.bit(hypoAlertsSupportedBit).toBool()
+        self.cgmFeature.hyperAlertsSupported = featureBits.bit(hyperAlertsSupportedBit).toBool()
+        self.cgmFeature.rateOfIncreaseDecreaseAlertsSupported = featureBits.bit(rateOfIncreaseDecreaseAlertsSupportedBit).toBool()
+        self.cgmFeature.deviceSpecificAlertSupported = featureBits.bit(deviceSpecificAlertSupportedBit).toBool()
+        self.cgmFeature.sensorMalfunctionDetectionSupported = featureBits.bit(sensorMalfunctionDetectionSupportedBit).toBool()
+        self.cgmFeature.sensorTemperatureHighLowDetectionSupported = featureBits.bit(sensorTemperatureHighLowDetectionSupportedBit).toBool()
+        self.cgmFeature.sensorResultHighLowDetectionSupported = featureBits.bit(sensorResultHighLowDetectionSupportedBit).toBool()
+        self.cgmFeature.lowBatteryDetectionSupported = featureBits.bit(lowBatteryDetectionSupportedBit).toBool()
+        self.cgmFeature.sensorTypeErrorDetectionSupported = featureBits.bit(sensorTypeErrorDetectionSupportedBit).toBool()
+        self.cgmFeature.generalDeviceFaultSupported = featureBits.bit(generalDeviceFaultSupportedBit).toBool()
+        self.cgmFeature.e2eCRCSupported = featureBits.bit(e2eCRCSupportedBit).toBool()
+        self.cgmFeature.multipleBondSupported = featureBits.bit(multipleBondSupportedBit).toBool()
+        self.cgmFeature.multipleSessionsSupported = featureBits.bit(multipleSessionsSupportedBit).toBool()
+        self.cgmFeature.cgmTrendInformationSupported = featureBits.bit(cgmTrendInformationSupportedBit).toBool()
+        self.cgmFeature.cgmQualitySupported = featureBits.bit(cgmQualitySupportedBit).toBool()
         
         let cgmTypeAndSampleLocation = (data?.subdata(with: cgmTypeAndSampleLocationRange) as NSData!)
-        cgmType = (cgmTypeAndSampleLocation?.lowNibbleAtPosition())!
-        cgmSampleLocation = (cgmTypeAndSampleLocation?.highNibbleAtPosition())!
+        self.cgmFeature.cgmType = (cgmTypeAndSampleLocation?.lowNibbleAtPosition())!
+        self.cgmFeature.cgmSampleLocation = (cgmTypeAndSampleLocation?.highNibbleAtPosition())!
     }
 }

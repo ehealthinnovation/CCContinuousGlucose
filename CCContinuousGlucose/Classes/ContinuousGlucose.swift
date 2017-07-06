@@ -288,20 +288,6 @@ public class ContinuousGlucose : NSObject {
         }
     }
     
-    public func prepareSession() {
-        resetDeviceSpecificAlert()
-        setSessionStartTime()
-        setCommunicationInterval(minutes: 1)
-        setGlucoseCalibrationValue(glucoseConcentration: 120, calibrationTime: 10, type: 1, location: 1)
-        setPatientHighAlertLevel(level: 280)
-        setPatientLowAlertLevel(level: 100)
-        setHyperAlertLevel(level: 300)
-        setHypoAlertLevel(level: 90)
-        setRateOfDecreaseAlertLevel(glucoseConcentration: -1.0)
-        setRateOfIncreaseAlertLevel(glucoseConcentration: 1.0)
-        getSessionStartTime()
-    }
-    
     public func stopSession() {
         let stopSessionData = Data(bytes: [0x1B, 0x00, 0x81, 0x81] as [UInt8], count: 4)
         
