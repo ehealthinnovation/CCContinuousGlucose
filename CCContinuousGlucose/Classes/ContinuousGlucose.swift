@@ -58,6 +58,8 @@ public class ContinuousGlucose : NSObject {
     public var modelNumber : String?
     public var serialNumber : String?
     public var firmwareVersion : String?
+    public var hardwareVersion : String?
+    public var softwareVersion : String?
     
     public let sessionRunTimeDataRange = NSRange(location:0, length: 2)
     
@@ -614,6 +616,12 @@ extension ContinuousGlucose: BluetoothCharacteristicProtocol {
         }
         if (characteristic.uuid.uuidString == "2A26") {
             self.firmwareVersion = String(data: characteristic.value!, encoding: .utf8)
+        }
+        if (characteristic.uuid.uuidString == "2A27") {
+            self.hardwareVersion = String(data: characteristic.value!, encoding: .utf8)
+        }
+        if (characteristic.uuid.uuidString == "2A28") {
+            self.softwareVersion = String(data: characteristic.value!, encoding: .utf8)
         }
     }
     

@@ -96,7 +96,7 @@ public class CGMFhir: NSObject {
         
         //hardware revision
         let hardwareRevision = DeviceComponentProductionSpecification()
-        hardwareRevision.productionSpec = "1.0"
+        hardwareRevision.productionSpec = FHIRString.init(ContinuousGlucose.sharedInstance().hardwareVersion!)
         
         let hardwareRevisionCoding = Coding()
         hardwareRevisionCoding.code = "hardware-revision"
@@ -111,7 +111,7 @@ public class CGMFhir: NSObject {
         
         //software revision
         let softwareRevision = DeviceComponentProductionSpecification()
-        softwareRevision.productionSpec = "1.0"
+        softwareRevision.productionSpec = FHIRString.init(ContinuousGlucose.sharedInstance().softwareVersion!)
         
         let softwareRevisionCoding = Coding()
         softwareRevisionCoding.code = "software-revision"
@@ -127,7 +127,7 @@ public class CGMFhir: NSObject {
         
         //firmware revision
         let firmwareRevision = DeviceComponentProductionSpecification()
-        firmwareRevision.productionSpec = "1.0"
+        firmwareRevision.productionSpec = FHIRString.init(ContinuousGlucose.sharedInstance().firmwareVersion!)
         
         let firmwareRevisionCoding = Coding()
         firmwareRevisionCoding.code = "firmware-revision"
@@ -815,10 +815,13 @@ public class CGMFhir: NSObject {
         print("GlucoseMeterViewController: searchForSpecimen")
         let bodySite: String = String(describing: ContinuousGlucose.sharedInstance().continuousGlucoseFeatures.cgmFeature.cgmSampleLocation!)
         let type = String(describing: ContinuousGlucose.sharedInstance().continuousGlucoseFeatures.cgmFeature.cgmType!)
+        let deviceReference = Reference()
+        deviceReference.reference = FHIRString.init("Device/\(String(describing: self.device!.id!))")
         
         let searchDict: [String:Any] = [
             "bodysite": bodySite,
-            "type": type
+            "type": type,
+            "subject": String(describing: "Device/\(self.device!.id!)")
         ]
         
         FHIR.fhirInstance.searchForSpecimen(searchParameters: searchDict) { (bundle, error) -> Void in
@@ -840,5 +843,4 @@ public class CGMFhir: NSObject {
             callback(bundle, error)
         }
     }
-
 }
