@@ -815,8 +815,6 @@ public class CGMFhir: NSObject {
         print("GlucoseMeterViewController: searchForSpecimen")
         let bodySite: String = String(describing: ContinuousGlucose.sharedInstance().continuousGlucoseFeatures.cgmFeature.cgmSampleLocation!)
         let type = String(describing: ContinuousGlucose.sharedInstance().continuousGlucoseFeatures.cgmFeature.cgmType!)
-        let deviceReference = Reference()
-        deviceReference.reference = FHIRString.init("Device/\(String(describing: self.device!.id!))")
         
         let searchDict: [String:Any] = [
             "bodysite": bodySite,
