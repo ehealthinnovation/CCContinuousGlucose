@@ -19,10 +19,12 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
     private var continuousGlucose: ContinuousGlucose!
     var glucoseMeasurements: Array<ContinuousGlucoseMeasurement> = Array<ContinuousGlucoseMeasurement>()
     var selectedGlucoseMeasurement: ContinuousGlucoseMeasurement!
+    var glucoseMeasurementCounter: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        glucoseMeasurementCounter = 0
         setupLineChart()
         ContinuousGlucose.sharedInstance().continuousGlucoseMeasurementDelegate = self
         ContinuousGlucose.sharedInstance().startSession()
@@ -150,12 +152,26 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
     
     //MARK
     func continuousGlucoseMeasurement(measurement: ContinuousGlucoseMeasurement) {
+        glucoseMeasurementCounter += 1
         measurement.existsOnFHIR = false
         glucoseMeasurements.append(measurement)
         updateLineChart()
         
+        // Upload method: single measurement
+        //if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
+        //    CGMFhir.CGMFhirInstance.uploadSingleMeasurement(measurement: measurement)
+        //}
+        
+        // Upload method: bundle of 10 measurements
         if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
-            CGMFhir.CGMFhirInstance.uploadSingleMeasurement(measurement: measurement)
+            if glucoseMeasurementCounter == 10 {
+                glucoseMeasurementCounter = 0
+                CGMFhir.CGMFhirInstance.uploadObservationBundle(measurements: self.glucoseMeasurements) { (_, error) -> Void in
+                    if let error = error {
+                        print("error uploading bundle: \(error)")
+                    }
+                }
+            }
         }
     }
 }

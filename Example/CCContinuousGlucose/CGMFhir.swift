@@ -73,17 +73,14 @@ public class CGMFhir: NSObject {
                 print("error searching for patient: \(error)")
             }
             
-            if bundle?.entry == nil {
-                
-            } else {
-                if bundle?.entry != nil {
-                    let patients = bundle?.entry?
-                        .filter { return $0.resource is Patient }
-                        .map { return $0.resource as! Patient }
+            if bundle?.entry != nil {
+                let patients = bundle?.entry?
+                    .filter { return $0.resource is Patient }
+                    .map { return $0.resource as! Patient }
                     
-                    self.patient = patients?[0]
-                }
+                self.patient = patients?[0]
             }
+            
             callback(bundle, error)
         }
     }
@@ -427,17 +424,14 @@ public class CGMFhir: NSObject {
                 print("error searching for device: \(error)")
             }
             
-            if bundle?.entry == nil {
-                
-            } else {
-                if bundle?.entry != nil {
-                    let devices = bundle?.entry?
-                        .filter { return $0.resource is Device }
-                        .map { return $0.resource as! Device }
+            if bundle?.entry != nil {
+                let devices = bundle?.entry?
+                    .filter { return $0.resource is Device }
+                    .map { return $0.resource as! Device }
                     
                     self.device = devices?[0]
-                }
             }
+            
             callback(bundle, error)
         }
     }
@@ -769,6 +763,47 @@ public class CGMFhir: NSObject {
                 measurement.existsOnFHIR = true
                 measurement.fhirID = String(describing: observation.id!)
             }
+        }
+    }
+    
+    func uploadObservationBundle(measurements: [ContinuousGlucoseMeasurement], callback: @escaping FHIRSearchBundleErrorCallback) {
+        var pendingObservations: [Observation] = []
+        var measurementArrayLocation: [Int] = []
+        
+        for i in 0...measurements.count - 1 {
+            if measurements[i].existsOnFHIR == false {
+                print("measurement pending: \(i)")
+                pendingObservations.append(self.measurementToObservation(measurement: measurements[i]))
+                measurementArrayLocation.append(i)
+            }
+        }
+        
+        if pendingObservations.count == 0 {
+            return
+        }
+        
+        FHIR.fhirInstance.createObservationBundle(observations: pendingObservations) { (bundle, error) -> Void in
+            guard error == nil else {
+                print("error creating observations: \(String(describing: error))")
+                return
+            }
+            
+            if let count = bundle?.entry?.count {
+                //iterate through the batch response entries, start from 1 (zero is not a observation response)
+                for i in 1...count-1 {
+                    if bundle?.entry?[i].response?.status == "201 Created" {
+                        let components = bundle?.entry?[i].response?.location?.absoluteString.components(separatedBy: "/")
+                        measurements[measurementArrayLocation[i-1]].existsOnFHIR = true
+                        measurements[measurementArrayLocation[i-1]].fhirID = components![1]
+                        
+                        print("observation uploaded with ID \(components![1])")
+                    }
+                }
+            } else {
+                print("problem uploading bundle, count is zero")
+            }
+            
+            callback(bundle, error)
         }
     }
     

@@ -495,7 +495,6 @@ class CGMViewController: UITableViewController {
                         if error == nil {
                             print("patient created with id: \(String(describing: CGMFhir.CGMFhirInstance.patient!.id!))")
                             self.refreshTable()
-                            self.logEvent(event: "patient created with id: \(String(describing: CGMFhir.CGMFhirInstance.patient!.id!))")
                         }
                     }
                 }
@@ -511,12 +510,10 @@ class CGMViewController: UITableViewController {
                     CGMFhir.CGMFhirInstance.createDevice { (device, error) -> Void in
                         if error == nil {
                             print("device created with id: \(String(describing: CGMFhir.CGMFhirInstance.device!.id!))")
-                            self.logEvent(event: "device created with id: \(String(describing: CGMFhir.CGMFhirInstance.device!.id!))")
                             self.refreshTable()
                             CGMFhir.CGMFhirInstance.createDeviceComponent { (error) -> Void in
                                 if error == nil {
                                     print("device component created with id: \(String(describing: CGMFhir.CGMFhirInstance.deviceComponent!.id!))")
-                                    self.logEvent(event: "device component created with id: \(String(describing: CGMFhir.CGMFhirInstance.deviceComponent!.id!))")
                                     self.refreshTable()
                                     CGMFhir.CGMFhirInstance.createSpecimen()
                                 }
@@ -543,13 +540,6 @@ class CGMViewController: UITableViewController {
         activity.startAnimating()
         
         return activity
-    }
-
-    func logEvent(event: String) {
-        print("log: \(event)")
-        //let logMessage = LogMessage(date: Date(), text: event)
-        //log.append(logMessage)
-        self.refreshTable()
     }
     
     //MARK
@@ -637,23 +627,25 @@ extension CGMViewController: ContinuousGlucoseProtocol {
         print("searchForFHIRResources")
         
         DispatchQueue.once(executeToken: "continuousGlucose.searchforFHIRResources.runOnce") {
-            self.logEvent(event: "searching for patient \(CGMFhir.CGMFhirInstance.givenName) \(CGMFhir.CGMFhirInstance.familyName)")
+            print("searching for patient \(CGMFhir.CGMFhirInstance.givenName) \(CGMFhir.CGMFhirInstance.familyName)")
             
             CGMFhir.CGMFhirInstance.searchForPatient(given: String(describing:  CGMFhir.CGMFhirInstance.givenName), family: String(describing: CGMFhir.CGMFhirInstance.familyName)) { (bundle, error) -> Void in
                 if let error = error {
-                    self.logEvent(event: "error searching for patient: \(error)")
+                    print("error searching for patient: \(error)")
                 }
                 
                 if bundle?.entry != nil {
-                    self.logEvent(event: "patient found")
+                    print("patient found")
+                    self.refreshTable()
                     
-                    CGMFhir.CGMFhirInstance.searchForDevice { (_, error) -> Void in
+                    CGMFhir.CGMFhirInstance.searchForDevice { (bundle, error) -> Void in
                         if let error = error {
                             print("error searching for device: \(error)")
                         }
                         
                         if bundle?.entry != nil {
-                            self.logEvent(event: "device found")
+                            print("device found")
+                            self.refreshTable()
                             
                             CGMFhir.CGMFhirInstance.searchForSpecimen { (bundle, error) -> Void in
                                 if let error = error {
@@ -661,15 +653,15 @@ extension CGMViewController: ContinuousGlucoseProtocol {
                                 }
                                 
                                 if bundle?.entry != nil {
-                                    self.logEvent(event: "specimen found")
+                                    print("specimen found")
                                 }
                              }
                         } else {
-                            self.logEvent(event: "device not found")
+                            print("device not found")
                         }
                     }
                 } else {
-                    self.logEvent(event: "patient not found")
+                    print("patient not found")
                 }
             }
         }

@@ -156,6 +156,30 @@ class FHIR: NSObject {
         }
     }
     
+    public func createObservationBundle(observations:[Observation], callback: @escaping FHIRSearchBundleErrorCallback) {
+        let bundle = SMART.Bundle()
+        bundle.type = BundleType.batch
+        
+        bundle.entry = observations.map {
+            let entry = BundleEntry()
+            entry.resource = $0
+            
+            let httpVerb = HTTPVerb(rawValue: "POST")
+            let entryRequest = BundleEntryRequest(method: httpVerb!, url: FHIRURL.init((self.server?.baseURL)!))
+            entry.request = entryRequest
+            
+            return entry
+        }
+        
+        bundle.createAndReturn(self.server!) { error in
+            if let error = error {
+                print(error)
+            }
+            
+            callback(bundle, error)
+        }
+    }
+    
     public func createSpecimen(specimen: Specimen, callback: @escaping (_ specimen: Specimen, _ error: Error?) -> Void) {
         specimen.createAndReturn(server!) { error in
             if let error = error {
