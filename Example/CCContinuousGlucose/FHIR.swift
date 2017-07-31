@@ -114,18 +114,6 @@ class FHIR: NSObject {
         }
     }
     
-    public func searchForObservationByID(idString:String, callback: @escaping FHIRSearchBundleErrorCallback) {
-        let searchObservation = Observation.search(["_id": idString])
-        
-        searchObservation.perform((smart?.server)!) { bundle, error in
-            if let error = error {
-                print(error)
-            }
-            
-            callback(bundle, error)
-        }
-    }
-    
     public func searchForObservation(searchParameters: Dictionary<String, Any>, callback: @escaping FHIRSearchBundleErrorCallback) {
         let searchObservation = Observation.search(searchParameters)
         
@@ -140,6 +128,7 @@ class FHIR: NSObject {
                     print(observations!)
                     callback(bundle, error)
                 } else {
+                    print("observation not found")
                     callback(bundle, error)
                 }
             }

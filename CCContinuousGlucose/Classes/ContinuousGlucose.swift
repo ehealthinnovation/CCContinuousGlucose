@@ -583,6 +583,13 @@ extension ContinuousGlucose: BluetoothCharacteristicProtocol {
             }
         }
         if(characteristic.uuid.uuidString == CGMSessionStartTimeCharacteristic) {
+            let when = DispatchTime.now() + 1
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                    DispatchQueue.once(executeToken: "continuousGlucose.readStartTime") {
+                        Bluetooth.sharedInstance().readCharacteristic((self.peripheral?.findCharacteristicByUUID(CGMSessionStartTimeCharacteristic))!)
+                    }
+            }
+            
             if(crcIsValid(data: characteristic.value! as NSData)) {
                 self.parseCGMSessionStartTime(data: characteristic.value! as NSData)
             }

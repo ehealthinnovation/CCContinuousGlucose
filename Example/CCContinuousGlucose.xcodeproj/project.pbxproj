@@ -14,7 +14,6 @@
 		50BC2BFD1EEAD64B00BD7F78 /* FHIR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BC2BFC1EEAD64B00BD7F78 /* FHIR.swift */; };
 		50BC2C001EEB049600BD7F78 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BC2BFE1EEB049600BD7F78 /* DeviceViewController.swift */; };
 		50BC2C011EEB049600BD7F78 /* PatientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BC2BFF1EEB049600BD7F78 /* PatientViewController.swift */; };
-		50BC2C031EEB12A000BD7F78 /* DispatchQueue+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BC2C021EEB12A000BD7F78 /* DispatchQueue+Extension.swift */; };
 		50BC2C051EEF24F500BD7F78 /* ContinuousGlucoseMeasurement+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BC2C041EEF24F500BD7F78 /* ContinuousGlucoseMeasurement+Extension.swift */; };
 		50CAFD171EC0F1FD008C2021 /* MeasurementDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CAFD161EC0F1FD008C2021 /* MeasurementDetailsViewController.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
@@ -46,7 +45,6 @@
 		50BC2BFC1EEAD64B00BD7F78 /* FHIR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FHIR.swift; sourceTree = "<group>"; };
 		50BC2BFE1EEB049600BD7F78 /* DeviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceViewController.swift; sourceTree = "<group>"; };
 		50BC2BFF1EEB049600BD7F78 /* PatientViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientViewController.swift; sourceTree = "<group>"; };
-		50BC2C021EEB12A000BD7F78 /* DispatchQueue+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Extension.swift"; sourceTree = "<group>"; };
 		50BC2C041EEF24F500BD7F78 /* ContinuousGlucoseMeasurement+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContinuousGlucoseMeasurement+Extension.swift"; sourceTree = "<group>"; };
 		50CAFD161EC0F1FD008C2021 /* MeasurementDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasurementDetailsViewController.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* CCContinuousGlucose_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCContinuousGlucose_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,7 +111,6 @@
 			isa = PBXGroup;
 			children = (
 				50BC2C041EEF24F500BD7F78 /* ContinuousGlucoseMeasurement+Extension.swift */,
-				50BC2C021EEB12A000BD7F78 /* DispatchQueue+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -457,7 +454,6 @@
 				50BC2C011EEB049600BD7F78 /* PatientViewController.swift in Sources */,
 				5025785B1EF02C16008FA2BD /* CGMFhir.swift in Sources */,
 				607FACD81AFB9204008FA782 /* CGMViewController.swift in Sources */,
-				50BC2C031EEB12A000BD7F78 /* DispatchQueue+Extension.swift in Sources */,
 				503A04CE1EBA085800C3D169 /* ChartViewController.swift in Sources */,
 				50AD479E1E9BDF940014427A /* DiscoverCGMViewController.swift in Sources */,
 				50BC2BFD1EEAD64B00BD7F78 /* FHIR.swift in Sources */,
