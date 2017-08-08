@@ -18,7 +18,7 @@ public class ContinuousGlucoseMeasurement : NSObject {
     public var sensorStatusAnnunciationFieldCalTempOctetPresent: Bool?
     public var sensorStatusAnnunciationFieldStatusOctetPresent: Bool?
     public var glucoseConcentration: Float = 0
-    public var timeOffset: UInt16 = 0
+    public var timeOffset: Int = 0
     public var status: ContinuousGlucoseAnnunciation?
     public var trendValue: Float = 0
     public var quality: Float = 0
@@ -37,75 +37,139 @@ public class ContinuousGlucoseMeasurement : NSObject {
     private let sensorStatusAnnunciationFieldCalTempOctetPresentBit = 6
     private let sensorStatusAnnunciationFieldStatusOctetPresentBit = 7
 
+    enum indexOffsets: Int {
+        case size = 0,
+        flags = 1,
+        cgmGlucoseConcentration = 2,
+        timeOffset = 4,
+        sensorStatusAnnunciation = 6,
+        cgmTrendInformation = 9,
+        cgmQuality = 11,
+        e2eCRC = 13
+    }
+    
+    struct Flag {
+        var position: Int?
+        var value: Int?
+        var dataLength: Int?
+    }
+    var flags: [Flag] = []
+    
+    enum FlagBytes: Int {
+        case cgmTrendInformationPresent, cgmQualityPresent, sensorStatusAnnunciationFieldWarningOctetPresent, sensorStatusAnnunciationFieldCalTempOctetPresent, sensorStatusAnnunciationFieldStatusOctetPresent, count
+    }
+
     
     init(data: NSData?) {
         super.init()
         
         self.packetData = data
-        parseFlags(flags:(data?.subdata(with: flagsRange) as NSData!))
-        parseGlucoseConcentration(data:(data?.subdata(with: glucoseConcentrationRange) as NSData!))
-        parseTimeOffset(data:(data?.subdata(with: timeOffsetRange) as NSData!))
+        parseFlags()
+        parseGlucoseConcentration()
+        parseTimeOffset()
+        parseAnnunciation()
+        parseTrend()
+        parseQuality()
+    }
+    
+    func getOffset(max: Int) -> Int {
+        //first 5 bytes are mandatory
+        var offset: Int = 4
         
-        annunciationFieldSize = Int(NSNumber(value:sensorStatusAnnunciationFieldWarningOctetPresent!)) +
-        Int(NSNumber(value:sensorStatusAnnunciationFieldCalTempOctetPresent!)) +
-        Int(NSNumber(value:sensorStatusAnnunciationFieldStatusOctetPresent!))
+        for flag in flags {
+            if flag.value == 1 {
+                offset += flag.dataLength!
+            }
+        }
+        
+        if offset >= max {
+            return max
+        }
+        
+        return offset
+    }
+    
+    func flagPresent(flagByte: Int) -> Int {
+        for flag in flags {
+            if flag.position == flagByte {
+                return flag.value!
+            }
+        }
+        
+        return 0
+    }
+
+    func parseFlags() {
+        let flagsData = packetData?.subdata(with: flagsRange) as NSData!
+        let flagsString = flagsData?.toHexString()
+        let flagsByte = Int(strtoul(flagsString, nil, 16))
+        print("flags byte: \(flagsByte)")
+        
+        self.flags.append(Flag(position: FlagBytes.cgmTrendInformationPresent.rawValue, value: flagsByte.bit(0), dataLength: 2))
+        self.flags.append(Flag(position: FlagBytes.cgmQualityPresent.rawValue, value: flagsByte.bit(1), dataLength: 2))
+        self.flags.append(Flag(position: FlagBytes.sensorStatusAnnunciationFieldWarningOctetPresent.rawValue, value: flagsByte.bit(5), dataLength: 1))
+        self.flags.append(Flag(position: FlagBytes.sensorStatusAnnunciationFieldCalTempOctetPresent.rawValue, value: flagsByte.bit(6), dataLength: 1))
+        self.flags.append(Flag(position: FlagBytes.sensorStatusAnnunciationFieldStatusOctetPresent.rawValue, value: flagsByte.bit(7), dataLength: 1))
+    }
+    
+    func parseGlucoseConcentration() {
+        let glucoseConcentrationData = packetData?.subdata(with: glucoseConcentrationRange) as NSData!
+        self.glucoseConcentration = (glucoseConcentrationData?.shortFloatToFloat())!
+        
+        print("glucose concentration: \(glucoseConcentration)")
+    }
+    
+    func parseTimeOffset() {
+        let timeOffsetData: NSData = packetData?.subdata(with: timeOffsetRange) as NSData!
+        let timeOffsetString = timeOffsetData.swapUInt16Data().toHexString()
+        let timeOffsetByte = Int(strtoul(timeOffsetString, nil, 16))
+        self.timeOffset = timeOffsetByte
+        
+        print("time offset: \(timeOffset)")
+    }
+
+    func parseAnnunciation() {
+        self.annunciationFieldSize = self.flagPresent(flagByte: FlagBytes.sensorStatusAnnunciationFieldWarningOctetPresent.rawValue) +
+            self.flagPresent(flagByte: FlagBytes.sensorStatusAnnunciationFieldCalTempOctetPresent.rawValue) +
+            self.flagPresent(flagByte: FlagBytes.sensorStatusAnnunciationFieldStatusOctetPresent.rawValue)
         
         let annunciationRange = NSRange(location: annunciationLocation, length: annunciationFieldSize)
         if annunciationFieldSize > 0 {
             print("annunciation: present")
-            parseAnnunciation(data:(data?.subdata(with: annunciationRange) as NSData!))
+            let annunciationData = packetData?.subdata(with: annunciationRange) as NSData!
+            self.status = ContinuousGlucoseAnnunciation(data: annunciationData)
         } else {
             print("annunciation: not present")
         }
-        
-        if self.cgmTrendInformationPresent! {
-            let trendRange = NSRange(location: annunciationLocation + annunciationFieldSize, length: 2)
-            parseTrend(data:(data?.subdata(with: trendRange) as NSData!))
-        }
-       
-        if self.cgmQualityPresent! {
-            if self.cgmTrendInformationPresent! {
-                qualityRange = NSRange(location:annunciationLocation + annunciationFieldSize + 2, length: 2)
-            } else {
-                qualityRange = NSRange(location:annunciationLocation + annunciationFieldSize, length: 2)
-            }
+    }
+    
+    func parseTrend() {
+        if self.flagPresent(flagByte: FlagBytes.cgmTrendInformationPresent.rawValue).toBool()! {
+            let offset: Int = getOffset(max: 6 + self.annunciationFieldSize)
+
+            print("parseTrend - offset: \(offset)")
             
-            parseQuality(data:(data?.subdata(with: qualityRange) as NSData!))
+            let trendRange = NSRange(location: offset, length: 2)
+            let trendData = packetData?.subdata(with: trendRange) as NSData!
+            trendValue = (trendData?.shortFloatToFloat())!
+            print("trend [(mg/dL)/min]: \(trendValue)")
+        } else {
+            print("trend not present")
         }
     }
     
-    func parseFlags(flags: NSData) {
-        var flagBits:Int = 0
-        flags.getBytes(&flagBits, length: 1)
-        cgmTrendInformationPresent = flagBits.bit(cgmTrendInformationPresentBit).toBool()
-        cgmQualityPresent = flagBits.bit(cgmQualityPresentBit).toBool()
-        sensorStatusAnnunciationFieldWarningOctetPresent = flagBits.bit(sensorStatusAnnunciationFieldWarningOctetPresentBit).toBool()
-        sensorStatusAnnunciationFieldCalTempOctetPresent = flagBits.bit(sensorStatusAnnunciationFieldCalTempOctetPresentBit).toBool()
-        sensorStatusAnnunciationFieldStatusOctetPresent = flagBits.bit(sensorStatusAnnunciationFieldStatusOctetPresentBit).toBool()
-    }
-    
-    func parseGlucoseConcentration(data: NSData) {
-        self.glucoseConcentration = data.shortFloatToFloat()
-        print("glucose concentration: \(glucoseConcentration)")
-    }
-    
-    func parseTimeOffset(data: NSData) {
-        data.getBytes(&timeOffset, length: 2)
-        print("time offset: \(timeOffset)")
-    }
-    
-    func parseAnnunciation(data: NSData) {
-        self.status = ContinuousGlucoseAnnunciation(data: data)
-    }
-    
-    func parseTrend(data: NSData) {
-        trendValue = data.shortFloatToFloat()
-        print("trend [(mg/dL)/min]: \(trendValue)")
-    }
-    
-    func parseQuality(data: NSData) {
-        quality = data.shortFloatToFloat()
-        print("quality(%): \(quality)")
+    func parseQuality() {
+        if self.flagPresent(flagByte: FlagBytes.cgmQualityPresent.rawValue).toBool()! {
+            let offset: Int = getOffset(max: 8 + self.annunciationFieldSize)
+            print("parseQuality - offset: \(offset)")
+            
+            let qualityRange = NSRange(location: offset, length: 2)
+            let qualityData = packetData?.subdata(with: qualityRange) as NSData!
+            quality = (qualityData?.shortFloatToFloat())!
+            print("quality(%): \(quality)")
+        } else {
+            print("quality not present")
+        }
     }
     
     public func toMMOL() -> Float? {
