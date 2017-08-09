@@ -148,7 +148,7 @@ public class CGMFhir: NSObject {
         
         // device identifier (serial number)
         let deviceIdentifier = Identifier()
-        deviceIdentifier.value = FHIRString.init(self.serialNumber)
+        deviceIdentifier.value = FHIRString.init(ContinuousGlucose.sharedInstance().serialNumber!)
         
         var deviceIdentifierCodingArray = [Coding]()
         let deviceIdentifierCoding = Coding()
