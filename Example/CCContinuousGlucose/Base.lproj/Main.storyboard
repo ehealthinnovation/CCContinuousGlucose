@@ -228,7 +228,9 @@
                     <navigationItem key="navigationItem" id="DkK-bT-Kro"/>
                     <connections>
                         <outlet property="lineChartView" destination="8eu-qT-lZo" id="gxS-6Z-cV4"/>
-                        <segue destination="9In-jk-lOj" kind="presentation" identifier="segueToMeasurementDetails" id="NPy-pZ-djL"/>
+                        <segue destination="9In-jk-lOj" kind="popoverPresentation" identifier="segueToMeasurementDetails" popoverAnchorView="L3Z-Sd-pSd" id="NPy-pZ-djL">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jDO-FG-jif" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -251,7 +253,7 @@
                                     <barButtonItem key="leftBarButtonItem" title="Measurement Details" id="QxK-ME-Dob">
                                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </barButtonItem>
-                                    <barButtonItem key="rightBarButtonItem" title="Done" id="iQA-bG-Syc">
+                                    <barButtonItem key="rightBarButtonItem" title="Close" id="iQA-bG-Syc">
                                         <connections>
                                             <action selector="doneButtonAction:" destination="9In-jk-lOj" id="HCU-Zr-UHL"/>
                                         </connections>

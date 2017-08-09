@@ -29,14 +29,25 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let customBackButton = UIBarButtonItem(title: "End Session", style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.customBackMethod(sender:)))
+
+        self.navigationItem.leftBarButtonItem = customBackButton
+
         glucoseMeasurementCounter = 0
         setupLineChart()
         ContinuousGlucose.sharedInstance().continuousGlucoseMeasurementDelegate = self
         ContinuousGlucose.sharedInstance().startSession()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    // @objc is so we can use #selector() up above
+    @objc func customBackMethod(sender: UIBarButtonItem) {
         ContinuousGlucose.sharedInstance().stopSession()
+
+        self.navigationController?.popViewController(animated: true)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+
     }
 
     func setupLineChart() {
@@ -137,8 +148,9 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToMeasurementDetails" {
-            let destVC = (segue.destination as! MeasurementDetailsViewController)
-            destVC.glucoseMeasurement = selectedGlucoseMeasurement
+            let MeasurementDetailsVC = (segue.destination as! MeasurementDetailsViewController)
+            //MeasurementDetailsVC.modalPresentationStyle = .fullScreen
+            MeasurementDetailsVC.glucoseMeasurement = selectedGlucoseMeasurement
         }
     }
 
@@ -149,10 +161,14 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
         let measurementDetailsVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "measurementDetailsView") as! MeasurementDetailsViewController
         measurementDetailsVC.glucoseMeasurement = glucoseMeasurement
 
-        self.addChildViewController(measurementDetailsVC)
-        measurementDetailsVC.view.frame = self.view.frame
-        self.view.addSubview(measurementDetailsVC.view)
-        measurementDetailsVC.didMove(toParentViewController: self)
+        selectedGlucoseMeasurement = glucoseMeasurement
+
+        performSegue(withIdentifier: "segueToMeasurementDetails", sender: self)
+
+        //self.addChildViewController(measurementDetailsVC)
+        //measurementDetailsVC.view.frame = self.view.frame
+        //self.view.addSubview(measurementDetailsVC.view)
+        //measurementDetailsVC.didMove(toParentViewController: self)
     }
 
     //MARK

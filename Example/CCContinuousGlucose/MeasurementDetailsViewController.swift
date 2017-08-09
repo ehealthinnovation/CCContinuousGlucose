@@ -64,7 +64,7 @@ class MeasurementDetailsViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
     }
     
     override func didReceiveMemoryWarning() {
@@ -216,7 +216,7 @@ class MeasurementDetailsViewController: UITableViewController {
     }
     
     @IBAction func doneButtonAction(_ sender: Any) {
-        self.view.removeFromSuperview()
+        self.dismiss(animated: true, completion: nil)
     }
     
 }
