@@ -38,7 +38,7 @@ public func prepareSession() {
   resetDeviceSpecificAlert()
   setSessionStartTime()
   setCommunicationInterval(minutes: 1)
-  setGlucoseCalibrationValue(glucoseConcentration: 120, 
+  setGlucoseCalibrationValue(glucoseConcentration: 120,
    calibrationTime: 10, type: 1, location: 1)
   setPatientHighAlertLevel(level: 280)
   setPatientLowAlertLevel(level: 100)
@@ -51,8 +51,7 @@ public func prepareSession() {
 ```
 
 ##### Graphing the CGM data
-Tapping 'start session' will call the prepareSession() method mentioned earlier to configure the sensor, and then start the session. Data recieved from the simulator will be graphed on screen. Individual data points can be selected to display the raw packet, along with the parsed data. Note that the graph supports pinching to zoom in and out, along with single finger scrolling. The x-axis indicates time in units of minutes, and the y-axis indicates glucose concentration level. Tap the back button to stop the session.
-
+Tapping 'start session' will call the prepareSession() method mentioned earlier to configure the sensor, and then start the session. Data received from the simulator will be graphed on screen. Individual data points can be selected to display the raw packet, along with the parsed data. Note that the graph supports pinching to zoom in and out, along with single finger scrolling. The x-axis indicates time in units of minutes, and the y-axis indicates glucose concentration level. Tap the back button to stop the session.
 
 ##### FHIR integration
 Data can be uploaded to either the UHN 'fhirtest' server, or a FHIR server running on the same network as the iOS device. On the initial screen, tap "Select FHIR Server", and select from the list of discovered FHIR servers.
