@@ -561,6 +561,13 @@ class CGMViewController: UITableViewController {
             let DeviceViewVC =  segue.destination as! DeviceViewController
             DeviceViewVC.device = CGMFhir.CGMFhirInstance.device
         }
+        if segue.identifier == "segueToSession" {
+            let chartVC = segue.destination as! ChartViewController
+            chartVC.hyperAlertLine = 300
+            chartVC.hypoAlertLine = 90
+            chartVC.patientHighLine = 280
+            chartVC.patientLowLine = 100
+        }
     }
 
     func refreshTable() {

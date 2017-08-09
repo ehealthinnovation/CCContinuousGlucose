@@ -82,10 +82,16 @@ class MeasurementDetailsViewController: UITableViewController {
     
         switch indexPath.section {
         case Section.data.rawValue:
+            cell.textLabel?.textColor = UIColor.black
+            cell.detailTextLabel?.textColor = UIColor.black
+            
             cell.textLabel!.text = glucoseMeasurement.packetData?.toHexString()
             cell.detailTextLabel!.text = "raw packet"
             
         case Section.fhir.rawValue:
+            cell.textLabel?.textColor = UIColor.black
+            cell.detailTextLabel?.textColor = UIColor.black
+            
             switch indexPath.row {
             case Section.Fhir.existsOnFhir.rawValue:
                 cell.textLabel!.text = glucoseMeasurement.existsOnFHIR.description
@@ -98,6 +104,9 @@ class MeasurementDetailsViewController: UITableViewController {
             }
             
         case Section.details.rawValue:
+            cell.textLabel?.textColor = UIColor.black
+            cell.detailTextLabel?.textColor = UIColor.black
+            
             switch indexPath.row {
             case Section.Details.glucoseConcentration.rawValue:
                 let mmolString = String(describing: CGMFhir.CGMFhirInstance.truncateMeasurement(measurementValue: glucoseMeasurement.toMMOL()!))
@@ -116,6 +125,11 @@ class MeasurementDetailsViewController: UITableViewController {
                 print("")
             }
         case Section.annunciation.rawValue:
+            if glucoseMeasurement.status == nil {
+                cell.textLabel?.textColor = UIColor.gray
+                cell.detailTextLabel?.textColor = UIColor.gray
+            }
+            
             switch indexPath.row {
             case ContinuousGlucoseAnnunciation.Annunciation.sessionStopped.rawValue:
                 cell.textLabel!.text = glucoseMeasurement.status?.sessionStopped?.description
