@@ -753,6 +753,33 @@ public class CGMFhir: NSObject {
             observationExtensionArray.append(extensionElement)
             
             observation.extension_fhir = observationExtensionArray
+        } else {
+            var observationExtensionArray = [Extension]()
+            let observationExtensionContextURL: String = "https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.characteristic.cgm_measurement.xml"
+            
+            //Trend
+            var extensionElementCoding = Coding()
+            extensionElementCoding.system = FHIRURL.init(observationExtensionContextURL)
+            extensionElementCoding.code = FHIRString.init(String(describing: measurement.trendValue))
+            extensionElementCoding.display = FHIRString.init("Trend")
+            
+            var extensionElement = Extension()
+            extensionElement.url = FHIRURL.init(observationExtensionContextURL)
+            extensionElement.valueCoding = extensionElementCoding
+            observationExtensionArray.append(extensionElement)
+            
+            //Quality
+            extensionElementCoding = Coding()
+            extensionElementCoding.system = FHIRURL.init(observationExtensionContextURL)
+            extensionElementCoding.code = FHIRString.init(String(describing: measurement.quality))
+            extensionElementCoding.display = FHIRString.init("Quality")
+            
+            extensionElement = Extension()
+            extensionElement.url = FHIRURL.init(observationExtensionContextURL)
+            extensionElement.valueCoding = extensionElementCoding
+            observationExtensionArray.append(extensionElement)
+            
+            observation.extension_fhir = observationExtensionArray
         }
         
         return observation
