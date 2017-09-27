@@ -205,7 +205,8 @@ public class ContinuousGlucose : NSObject {
     }
     
     func parseCGMSessionStartTime(data: NSData) {
-        self.sessionStartTime = bluetoothDateTime.dateFromData(data: data)
+        let date:Date = bluetoothDateTime.dateFromData(data: data)
+        self.sessionStartTime = bluetoothDateTime.stringFromDate(date: date)
         continuousGlucoseDelegate?.continuousGlucoseSessionStartTimeUpdated()
     }
     

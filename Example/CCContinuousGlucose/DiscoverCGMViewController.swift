@@ -32,7 +32,7 @@ class DiscoverCGMViewController: UITableViewController, ContinuousGlucoseMeterDi
         ContinuousGlucose.sharedInstance().continuousGlucoseMeterDiscoveryDelegate  = self
     }
     
-    func onRefresh() {
+    @objc func onRefresh() {
         refreshControl?.endRefreshing()
         discoveredContinuousGlucoseMeters.removeAll()
         self.refreshTable()

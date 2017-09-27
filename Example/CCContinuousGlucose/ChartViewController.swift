@@ -44,7 +44,7 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
         llXAxis.lineWidth = 4.0
         llXAxis.lineDashLengths = [10.0, 10.0, 0.0]
         llXAxis.labelPosition = ChartLimitLine.LabelPosition.rightBottom
-        llXAxis.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFontWeightLight)
+        llXAxis.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFont.Weight.light)
         
         lineChartView.xAxis.gridLineDashLengths = [10.0, 10.0]
         lineChartView.xAxis.gridLineDashPhase = 0.0
@@ -54,28 +54,28 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
         hyperAlertLineLimit.lineWidth = 4.0
         hyperAlertLineLimit.lineDashLengths = [5.0, 5.0]
         hyperAlertLineLimit.labelPosition = ChartLimitLine.LabelPosition.rightTop
-        hyperAlertLineLimit.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFontWeightLight)
+        hyperAlertLineLimit.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFont.Weight.light)
         
         let hypoAlertLineLimit = ChartLimitLine(limit: 90.0, label: "Hypo Alert")
         hypoAlertLineLimit.lineColor = UIColor.red
         hypoAlertLineLimit.lineWidth = 4.0
         hypoAlertLineLimit.lineDashLengths = [5.0, 5.0]
         hypoAlertLineLimit.labelPosition = ChartLimitLine.LabelPosition.rightBottom
-        hypoAlertLineLimit.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFontWeightLight)
+        hypoAlertLineLimit.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFont.Weight.light)
         
         let patientHighLineLimit = ChartLimitLine(limit: 280.0, label: "Patient High Alert")
         patientHighLineLimit.lineColor = UIColor.green
         patientHighLineLimit.lineWidth = 4.0
         patientHighLineLimit.lineDashLengths = [5.0, 5.0]
         patientHighLineLimit.labelPosition = ChartLimitLine.LabelPosition.rightBottom
-        patientHighLineLimit.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFontWeightLight)
-
+        patientHighLineLimit.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFont.Weight.light)
+        
         let patientLowLineLimit = ChartLimitLine(limit: 100.0, label: "Patient Low Alert")
         patientLowLineLimit.lineColor = UIColor.green
         patientLowLineLimit.lineWidth = 4.0
         patientLowLineLimit.lineDashLengths = [5.0, 5.0]
         patientLowLineLimit.labelPosition = ChartLimitLine.LabelPosition.rightTop
-        patientLowLineLimit.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFontWeightLight)
+        patientLowLineLimit.valueFont = UIFont.systemFont(ofSize: 10.0, weight: UIFont.Weight.light)
         
         let leftAxis: YAxis = lineChartView.leftAxis
         leftAxis.removeAllLimitLines()
