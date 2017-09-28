@@ -560,8 +560,10 @@ extension ContinuousGlucose: BluetoothServiceProtocol {
         servicesAndCharacteristics[service.uuid.uuidString] = service.characteristics
         
         for characteristic in service.characteristics! {
-            DispatchQueue.global(qos: .background).async {
-                self.peripheral?.readValue(for: characteristic)
+            if characteristic.properties.contains(CBCharacteristicProperties.read) {
+                DispatchQueue.global(qos: .background).async {
+                    self.peripheral?.readValue(for: characteristic)
+                }
             }
         }
     }
