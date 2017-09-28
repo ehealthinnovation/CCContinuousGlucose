@@ -45,7 +45,7 @@ public class ContinuousGlucose : NSObject {
     public var continuousGlucoseStatus: ContinuousGlucoseStatus!
     public var continuousGlucoseSOCP: ContinuousGlucoseSOCP!
     public var continuousGlucoseSessionRunTime: ContinuousGlucoseSessionRunTime!
-    public var sessionStartTime: String?
+    public var sessionStartTime: Date?
 
     var bluetoothDateTime: BluetoothDateTime!
     var peripheralNameToConnectTo : String?
@@ -58,6 +58,8 @@ public class ContinuousGlucose : NSObject {
     public var modelNumber : String?
     public var serialNumber : String?
     public var firmwareVersion : String?
+    public var hardwareVersion : String?
+    public var softwareVersion : String?
     
     public let sessionRunTimeDataRange = NSRange(location:0, length: 2)
     
@@ -260,6 +262,12 @@ public class ContinuousGlucose : NSObject {
         return str
     }
     
+    public func getSessionStartTime() {
+        if let characteristic = peripheral?.findCharacteristicByUUID(CGMSessionStartTimeCharacteristic) {
+            self.peripheral?.readValue(for: characteristic)
+        }
+    }
+    
     public func setSessionStartTime() {
         let timeData = self.stringFromDate(date: Date()).dataFromHexadecimalString()
         var timeZoneInt = self.bluetoothDateTime.timeZone()
@@ -277,22 +285,8 @@ public class ContinuousGlucose : NSObject {
         
         if let characteristic = peripheral?.findCharacteristicByUUID(CGMSessionStartTimeCharacteristic) {
             self.writeCharacteristic(characteristic: characteristic, data: timeData! as Data)
-            self.peripheral?.readValue(for: characteristic)
+            //self.peripheral?.readValue(for: characteristic)
         }
-    }
-    
-    public func prepareSession() {
-        resetDeviceSpecificAlert()
-        setSessionStartTime()
-        setCommunicationInterval(minutes: 1)
-        setGlucoseCalibrationValue(glucoseConcentration: 120, calibrationTime: 10, type: 1, location: 1)
-        setPatientHighAlertLevel(level: 280)
-        setPatientLowAlertLevel(level: 100)
-        setHyperAlertLevel(level: 300)
-        setHypoAlertLevel(level: 90)
-        setRateOfDecreaseAlertLevel(glucoseConcentration: -1.0)
-        setRateOfIncreaseAlertLevel(glucoseConcentration: 1.0)
-        startSession()
     }
     
     public func stopSession() {
@@ -559,8 +553,10 @@ extension ContinuousGlucose: BluetoothServiceProtocol {
         servicesAndCharacteristics[service.uuid.uuidString] = service.characteristics
         
         for characteristic in service.characteristics! {
-            DispatchQueue.global(qos: .background).async {
-                self.peripheral?.readValue(for: characteristic)
+            if characteristic.properties.contains(CBCharacteristicProperties.read) {
+                DispatchQueue.global(qos: .background).async {
+                    self.peripheral?.readValue(for: characteristic)
+                }
             }
         }
     }
@@ -586,6 +582,13 @@ extension ContinuousGlucose: BluetoothCharacteristicProtocol {
             }
         }
         if(characteristic.uuid.uuidString == CGMSessionStartTimeCharacteristic) {
+            let when = DispatchTime.now() + 1
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                    DispatchQueue.once(executeToken: "continuousGlucose.readStartTime") {
+                        Bluetooth.sharedInstance().readCharacteristic((self.peripheral?.findCharacteristicByUUID(CGMSessionStartTimeCharacteristic))!)
+                    }
+            }
+            
             if(crcIsValid(data: characteristic.value! as NSData)) {
                 self.parseCGMSessionStartTime(data: characteristic.value! as NSData)
             }
@@ -619,6 +622,12 @@ extension ContinuousGlucose: BluetoothCharacteristicProtocol {
         }
         if (characteristic.uuid.uuidString == "2A26") {
             self.firmwareVersion = String(data: characteristic.value!, encoding: .utf8)
+        }
+        if (characteristic.uuid.uuidString == "2A27") {
+            self.hardwareVersion = String(data: characteristic.value!, encoding: .utf8)
+        }
+        if (characteristic.uuid.uuidString == "2A28") {
+            self.softwareVersion = String(data: characteristic.value!, encoding: .utf8)
         }
     }
     
