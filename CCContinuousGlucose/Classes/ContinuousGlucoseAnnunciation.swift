@@ -80,43 +80,43 @@ public class ContinuousGlucoseAnnunciation : NSObject {
             case .sessionStopped:
                 return NSLocalizedString("Session Stopped", comment:"")
             case .deviceBatteryLow:
-                return NSLocalizedString("Patient High Low Alerts Supported", comment:"")
+                return NSLocalizedString("Device Battery Low", comment:"")
             case .sensorTypeIncorrectForDevice:
-                return NSLocalizedString("Hypo Alerts Supported", comment:"")
+                return NSLocalizedString("Sensor Type Incorrect For Device", comment:"")
             case .sensorMalfunction:
-                return NSLocalizedString("Hypo Alerts Supported", comment:"")
+                return NSLocalizedString("Sensor Malfunction", comment:"")
             case .deviceSpecificAlert:
-                return NSLocalizedString("Rate Of Increase Decrease Alerts Supported", comment:"")
+                return NSLocalizedString("Device Specific Alert", comment:"")
             case .generalDeviceFaultHasOccurredInTheSensor:
-                return NSLocalizedString("Device Specific Alert Supported", comment:"")
+                return NSLocalizedString("General Device Fault Has Occurred In The Sensor", comment:"")
             case .timeSynchronizationBetweenSensorAndCollectorRequired:
-                return NSLocalizedString("Sensor Malfunction Detection Supported", comment:"")
+                return NSLocalizedString("Time Synchronization Between Sensor And Collector Required", comment:"")
             case .calibrationNotAllowed:
-                return NSLocalizedString("Sensor Temperature High Low Detection Supported", comment:"")
+                return NSLocalizedString("Calibration Not Allowed", comment:"")
             case .calibrationRecommended:
-                return NSLocalizedString("Sensor Result High Low Detection Supported", comment:"")
+                return NSLocalizedString("Calibration Recommended", comment:"")
             case .calibrationRequired:
-                return NSLocalizedString("Low Battery Detection Supported", comment:"")
+                return NSLocalizedString("Calibration Required", comment:"")
             case .sensorTemperatureTooHighForValidTestResultAtTimeOfMeasurement:
-                return NSLocalizedString("Sensor Type Error Detection Supported", comment:"")
+                return NSLocalizedString("Sensor Temperature Too High For Valid Test Result At Time Of Measurement", comment:"")
             case .sensorTemperatureTooLowForValidTestResultAtTimeOfMeasurement:
-                return NSLocalizedString("General Device Fault Supported", comment:"")
+                return NSLocalizedString("Sensor Temperature Too Low For Valid Test Result At Time Of Measurement", comment:"")
             case .sensorResultLowerThanThePatientLowLevel:
-                return NSLocalizedString("E2E CRC Supported", comment:"")
+                return NSLocalizedString("Sensor Result Lower Than The Patient Low Level", comment:"")
             case .sensorResultHigherThanThePatientHighLevel:
-                return NSLocalizedString("Multiple Bond Supported", comment:"")
+                return NSLocalizedString("Sensor Result Higher Than The Patient High Level", comment:"")
             case .sensorResultLowerThanTheHypoLevel:
-                return NSLocalizedString("Multiple Sessions Supported", comment:"")
+                return NSLocalizedString("Sensor Result Lower Than The Hypo Level", comment:"")
             case .sensorResultHigherThanTheHyperLevel:
-                return NSLocalizedString("CGM TrendInformationSupported", comment:"")
+                return NSLocalizedString("Sensor Result Higher Than The Hyper Level", comment:"")
             case .sensorRateOfDecreaseExceeded:
-                return NSLocalizedString("CGM Sensor Rate Of Decrease Exceeded", comment:"")
+                return NSLocalizedString("Sensor Rate Of Decrease Exceeded", comment:"")
             case .sensorRateOfIncreaseExceeded:
-                return NSLocalizedString("CGM Sensor Rate Of Increase Exceeded", comment:"")
+                return NSLocalizedString("Sensor Rate Of Increase Exceeded", comment:"")
             case .sensorResultLowerThanTheDeviceCanProcess:
-                return NSLocalizedString("CGM Sensor Result Lower Than The Device Can Process", comment:"")
+                return NSLocalizedString("Sensor Result Lower Than The Device Can Process", comment:"")
             case .sensorResultHigherThanTheDeviceCanProcess:
-                return NSLocalizedString("CGM Sensor Result Higher Than The Device Can Process", comment:"")
+                return NSLocalizedString("Sensor Result Higher Than The Device Can Process", comment:"")
             case .reserved:
                 return NSLocalizedString("Reserved", comment:"")
             }
