@@ -16,7 +16,6 @@ import Foundation
 import UIKit
 import CoreBluetooth
 import CCContinuousGlucose
-import SMART
 
 class CGMViewController: UITableViewController {
     var selectedMeter: CBPeripheral!
@@ -29,14 +28,12 @@ class CGMViewController: UITableViewController {
     var continuousGlucoseMeterConnected: Bool = false
     
     enum Section: Int {
-        case patient, device, session, features, cgmType, cgmSampleLocation, status, timeOffset, numberOfRecords, specificOpsControlPoint, startTime, runTime, count
+        case deviceInfo, session, features, cgmType, cgmSampleLocation, status, timeOffset, numberOfRecords, specificOpsControlPoint, startTime, runTime, count
         
         public func description() -> String {
             switch self {
-                case .patient:
-                    return "patient"
-                case .device:
-                    return "device"
+                case .deviceInfo:
+                    return "device information"
                 case .features:
                     return "features"
                 case .cgmType:
@@ -64,10 +61,8 @@ class CGMViewController: UITableViewController {
         
         public func rowCount() -> Int {
             switch self {
-            case .patient:
-                return Patient.count.rawValue
-            case .device:
-                return 1
+            case .deviceInfo:
+                return DeviceInfo.count.rawValue
             case .features:
                 return 17
             case .cgmType:
@@ -92,11 +87,8 @@ class CGMViewController: UITableViewController {
                 fatalError("invalid")
             }
         }
-        enum Patient: Int {
-            case patient, count
-        }
-
-        enum Device: Int {
+        
+        enum DeviceInfo: Int {
             case name, manufacturerName, modelNumber, serialNumber, firmwareVersion, count
         }
         
@@ -180,36 +172,25 @@ class CGMViewController: UITableViewController {
         cell.textLabel?.numberOfLines = 0
         
         switch indexPath.section {
-        case Section.patient.rawValue:
-            cell.textLabel!.text = "Given Name: \(CGMFhir.CGMFhirInstance.givenName)\nFamily Name: \(CGMFhir.CGMFhirInstance.familyName)"
-            if CGMFhir.CGMFhirInstance.patient != nil {
-                cell.detailTextLabel!.text = String(describing: "Patient FHIR ID: \(String(describing: CGMFhir.CGMFhirInstance.patient!.id!))")
-                cell.accessoryView = nil
-                cell.accessoryType = .disclosureIndicator
-            } else {
-                if FHIR.fhirInstance.fhirServerAddress.isEmpty {
-                    cell.detailTextLabel!.text = ""
-                } else {
-                    cell.detailTextLabel!.text = "Patient: Tap to upload"
-                }
-            }
-        case Section.device.rawValue:
-            if let manufacturer = ContinuousGlucose.sharedInstance().manufacturerName?.description {
-                cell.textLabel!.text = "Manufacturer: \(manufacturer)"
-            }
-            if let modelNumber = ContinuousGlucose.sharedInstance().modelNumber?.description {
-                cell.textLabel?.text?.append("\nModel: \(modelNumber)")
-            }
-            if CGMFhir.CGMFhirInstance.device != nil {
-                cell.detailTextLabel!.text = String(describing: "Device FHIR ID: \(String(describing: CGMFhir.CGMFhirInstance.device!.id!))")
-                cell.accessoryView = nil
-                cell.accessoryType = .disclosureIndicator
-            } else {
-                if FHIR.fhirInstance.fhirServerAddress.isEmpty {
-                    cell.detailTextLabel!.text = ""
-                } else {
-                    cell.detailTextLabel!.text = "Device: Tap to upload"
-                }
+        case Section.deviceInfo.rawValue:
+            switch indexPath.row {
+            case Section.DeviceInfo.name.rawValue:
+                cell.textLabel!.text = ContinuousGlucose.sharedInstance().name?.description
+                cell.detailTextLabel!.text = "name"
+            case Section.DeviceInfo.manufacturerName.rawValue:
+                cell.textLabel!.text = ContinuousGlucose.sharedInstance().manufacturerName?.description
+                cell.detailTextLabel!.text = "manufacturer name"
+            case Section.DeviceInfo.modelNumber.rawValue:
+                cell.textLabel!.text = ContinuousGlucose.sharedInstance().modelNumber?.description
+                cell.detailTextLabel!.text = "model number"
+            case Section.DeviceInfo.serialNumber.rawValue:
+                cell.textLabel!.text = ContinuousGlucose.sharedInstance().serialNumber?.description
+                cell.detailTextLabel!.text = "serial number"
+            case Section.DeviceInfo.firmwareVersion.rawValue:
+                cell.textLabel!.text = ContinuousGlucose.sharedInstance().firmwareVersion?.description
+                cell.detailTextLabel!.text = "firmware version"
+            default:
+                print("")
             }
         case Section.features.rawValue:
             if continuousGlucoseFeatures != nil {
@@ -468,60 +449,10 @@ class CGMViewController: UITableViewController {
     //MARK table delegate methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let cell = tableView.cellForRow(at: indexPath)! as UITableViewCell
         
         if indexPath.section == Section.session.rawValue {
-            if FHIR.fhirInstance.fhirServerAddress.isEmpty {
-                self.prepareSession()
-                performSegue(withIdentifier: "segueToSession", sender: self)
-            } else {
-                if CGMFhir.CGMFhirInstance.patient == nil || CGMFhir.CGMFhirInstance.device == nil {
-                    self.showAlert(title: "Patient and/or Device not uploaded", message: "Upload patient and/or device first")
-                    return
-                }
-
-                self.prepareSession()
-                performSegue(withIdentifier: "segueToSession", sender: self)
-            }
-        }
-        
-        if indexPath.section == Section.patient.rawValue {
-            if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
-                if (CGMFhir.CGMFhirInstance.patient?.id) != nil {
-                    performSegue(withIdentifier: "segueToPatient", sender: self)
-                } else {
-                    cell.accessoryView = self.createActivityView()
-                    CGMFhir.CGMFhirInstance.createPatient { (patient, error) -> Void in
-                        if error == nil {
-                            print("patient created with id: \(String(describing: CGMFhir.CGMFhirInstance.patient!.id!))")
-                            self.refreshTable()
-                        }
-                    }
-                }
-            }
-        }
-        
-        if indexPath.section == Section.device.rawValue {
-            if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
-                if (CGMFhir.CGMFhirInstance.device?.id) != nil {
-                    performSegue(withIdentifier: "segueToDevice", sender: self)
-                } else {
-                    cell.accessoryView = self.createActivityView()
-                    CGMFhir.CGMFhirInstance.createDevice { (device, error) -> Void in
-                        if error == nil {
-                            print("device created with id: \(String(describing: CGMFhir.CGMFhirInstance.device!.id!))")
-                            self.refreshTable()
-                            CGMFhir.CGMFhirInstance.createDeviceComponent { (error) -> Void in
-                                if error == nil {
-                                    print("device component created with id: \(String(describing: CGMFhir.CGMFhirInstance.deviceComponent!.id!))")
-                                    self.refreshTable()
-                                    CGMFhir.CGMFhirInstance.createSpecimen()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            self.prepareSession()
+            performSegue(withIdentifier: "segueToSession", sender: self)
         }
         
         if indexPath.section == Section.specificOpsControlPoint.rawValue {
@@ -553,14 +484,6 @@ class CGMViewController: UITableViewController {
     
     // MARK: Storyboard
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "segueToPatient" {
-            let PatientViewVC =  segue.destination as! PatientViewController
-            PatientViewVC.patient = CGMFhir.CGMFhirInstance.patient
-        }
-        if segue.identifier == "segueToDevice" {
-            let DeviceViewVC =  segue.destination as! DeviceViewController
-            DeviceViewVC.device = CGMFhir.CGMFhirInstance.device
-        }
         if segue.identifier == "segueToSession" {
             let chartVC = segue.destination as! ChartViewController
             chartVC.hyperAlertLine = 300
@@ -574,14 +497,6 @@ class CGMViewController: UITableViewController {
         DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
         })
-        
-        if ContinuousGlucose.sharedInstance().serialNumber?.description != nil {
-            DispatchQueue.once(executeToken: "continuousGlucose.refreshTable.runOnce") {
-                if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
-                    self.searchForFHIRResources()
-                }
-            }
-        }
     }
 }
 
@@ -628,50 +543,4 @@ extension CGMViewController: ContinuousGlucoseProtocol {
     func continuousGlucoseMeterDisconnected(meter: CBPeripheral) {
         continuousGlucoseMeterConnected = false
     }
-    
-    //MARK
-    public func searchForFHIRResources() {
-        print("searchForFHIRResources")
-        
-        DispatchQueue.once(executeToken: "continuousGlucose.searchforFHIRResources.runOnce") {
-            print("searching for patient \(CGMFhir.CGMFhirInstance.givenName) \(CGMFhir.CGMFhirInstance.familyName)")
-            
-            CGMFhir.CGMFhirInstance.searchForPatient(given: String(describing:  CGMFhir.CGMFhirInstance.givenName), family: String(describing: CGMFhir.CGMFhirInstance.familyName)) { (bundle, error) -> Void in
-                if let error = error {
-                    print("error searching for patient: \(error)")
-                }
-                
-                if bundle?.entry != nil {
-                    print("patient found")
-                    self.refreshTable()
-                    
-                    CGMFhir.CGMFhirInstance.searchForDevice { (bundle, error) -> Void in
-                        if let error = error {
-                            print("error searching for device: \(error)")
-                        }
-                        
-                        if bundle?.entry != nil {
-                            print("device found")
-                            self.refreshTable()
-                            
-                            CGMFhir.CGMFhirInstance.searchForSpecimen { (bundle, error) -> Void in
-                                if let error = error {
-                                    print("error searching for specimen: \(error)")
-                                }
-                                
-                                if bundle?.entry != nil {
-                                    print("specimen found")
-                                }
-                             }
-                        } else {
-                            print("device not found")
-                        }
-                    }
-                } else {
-                    print("patient not found")
-                }
-            }
-        }
-    }
-
 }

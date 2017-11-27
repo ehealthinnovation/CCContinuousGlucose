@@ -8,13 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4B955B2322A0BA41BAF6DB6D /* Pods_CCContinuousGlucose_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 950727AC85BA71F9786FD3C1 /* Pods_CCContinuousGlucose_Tests.framework */; };
-		5025785B1EF02C16008FA2BD /* CGMFhir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025785A1EF02C16008FA2BD /* CGMFhir.swift */; };
 		503A04CE1EBA085800C3D169 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503A04CD1EBA085800C3D169 /* ChartViewController.swift */; };
 		50AD479E1E9BDF940014427A /* DiscoverCGMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AD479D1E9BDF940014427A /* DiscoverCGMViewController.swift */; };
-		50BC2BFD1EEAD64B00BD7F78 /* FHIR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BC2BFC1EEAD64B00BD7F78 /* FHIR.swift */; };
-		50BC2C001EEB049600BD7F78 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BC2BFE1EEB049600BD7F78 /* DeviceViewController.swift */; };
-		50BC2C011EEB049600BD7F78 /* PatientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BC2BFF1EEB049600BD7F78 /* PatientViewController.swift */; };
-		50BC2C051EEF24F500BD7F78 /* ContinuousGlucoseMeasurement+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BC2C041EEF24F500BD7F78 /* ContinuousGlucoseMeasurement+Extension.swift */; };
 		50CAFD171EC0F1FD008C2021 /* MeasurementDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CAFD161EC0F1FD008C2021 /* MeasurementDetailsViewController.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* CGMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* CGMViewController.swift */; };
@@ -39,13 +34,8 @@
 		284521282C0C5E807B7A5045 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		3244B36D5D1C10E43FE0DF26 /* Pods-CCContinuousGlucose_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CCContinuousGlucose_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CCContinuousGlucose_Tests/Pods-CCContinuousGlucose_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		42D5ED67AD1101F536DF9C91 /* Pods-CCContinuousGlucose_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CCContinuousGlucose_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CCContinuousGlucose_Tests/Pods-CCContinuousGlucose_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		5025785A1EF02C16008FA2BD /* CGMFhir.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGMFhir.swift; sourceTree = "<group>"; };
 		503A04CD1EBA085800C3D169 /* ChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		50AD479D1E9BDF940014427A /* DiscoverCGMViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverCGMViewController.swift; sourceTree = "<group>"; };
-		50BC2BFC1EEAD64B00BD7F78 /* FHIR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FHIR.swift; sourceTree = "<group>"; };
-		50BC2BFE1EEB049600BD7F78 /* DeviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceViewController.swift; sourceTree = "<group>"; };
-		50BC2BFF1EEB049600BD7F78 /* PatientViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientViewController.swift; sourceTree = "<group>"; };
-		50BC2C041EEF24F500BD7F78 /* ContinuousGlucoseMeasurement+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContinuousGlucoseMeasurement+Extension.swift"; sourceTree = "<group>"; };
 		50CAFD161EC0F1FD008C2021 /* MeasurementDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasurementDetailsViewController.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* CCContinuousGlucose_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCContinuousGlucose_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -85,34 +75,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		50BC2C061EEF2A1F00BD7F78 /* FHIR */ = {
-			isa = PBXGroup;
-			children = (
-				5025785A1EF02C16008FA2BD /* CGMFhir.swift */,
-				50BC2BFC1EEAD64B00BD7F78 /* FHIR.swift */,
-			);
-			name = FHIR;
-			sourceTree = "<group>";
-		};
 		50BC2C071EEF2A2700BD7F78 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				50BC2BFE1EEB049600BD7F78 /* DeviceViewController.swift */,
 				607FACD71AFB9204008FA782 /* CGMViewController.swift */,
 				503A04CD1EBA085800C3D169 /* ChartViewController.swift */,
 				50AD479D1E9BDF940014427A /* DiscoverCGMViewController.swift */,
 				50CAFD161EC0F1FD008C2021 /* MeasurementDetailsViewController.swift */,
-				50BC2BFF1EEB049600BD7F78 /* PatientViewController.swift */,
 			);
 			name = ViewControllers;
-			sourceTree = "<group>";
-		};
-		50BC2C081EEF2A3C00BD7F78 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				50BC2C041EEF24F500BD7F78 /* ContinuousGlucoseMeasurement+Extension.swift */,
-			);
-			name = Extensions;
 			sourceTree = "<group>";
 		};
 		607FACC71AFB9204008FA782 = {
@@ -139,9 +110,7 @@
 		607FACD21AFB9204008FA782 /* Example for CCContinuousGlucose */ = {
 			isa = PBXGroup;
 			children = (
-				50BC2C081EEF2A3C00BD7F78 /* Extensions */,
 				50BC2C071EEF2A2700BD7F78 /* ViewControllers */,
-				50BC2C061EEF2A1F00BD7F78 /* FHIR */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
@@ -427,7 +396,6 @@
 				"${BUILT_PRODUCTS_DIR}/CCContinuousGlucose/CCContinuousGlucose.framework",
 				"${BUILT_PRODUCTS_DIR}/CCToolbox/CCToolbox.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
-				"${BUILT_PRODUCTS_DIR}/SMART/SMART.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -435,7 +403,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CCContinuousGlucose.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CCToolbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SMART.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -450,14 +417,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				50CAFD171EC0F1FD008C2021 /* MeasurementDetailsViewController.swift in Sources */,
-				50BC2C001EEB049600BD7F78 /* DeviceViewController.swift in Sources */,
-				50BC2C011EEB049600BD7F78 /* PatientViewController.swift in Sources */,
-				5025785B1EF02C16008FA2BD /* CGMFhir.swift in Sources */,
 				607FACD81AFB9204008FA782 /* CGMViewController.swift in Sources */,
 				503A04CE1EBA085800C3D169 /* ChartViewController.swift in Sources */,
 				50AD479E1E9BDF940014427A /* DiscoverCGMViewController.swift in Sources */,
-				50BC2BFD1EEAD64B00BD7F78 /* FHIR.swift in Sources */,
-				50BC2C051EEF24F500BD7F78 /* ContinuousGlucoseMeasurement+Extension.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

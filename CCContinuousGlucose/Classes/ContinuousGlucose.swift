@@ -285,7 +285,6 @@ public class ContinuousGlucose : NSObject {
         
         if let characteristic = peripheral?.findCharacteristicByUUID(CGMSessionStartTimeCharacteristic) {
             self.writeCharacteristic(characteristic: characteristic, data: timeData! as Data)
-            //self.peripheral?.readValue(for: characteristic)
         }
     }
     

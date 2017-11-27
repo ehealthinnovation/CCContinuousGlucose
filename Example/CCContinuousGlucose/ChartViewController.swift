@@ -39,7 +39,7 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
         ContinuousGlucose.sharedInstance().startSession()
     }
 
-    // @objc is so we can use #selector() up above
+    // @objc is so we can use #selector()
     @objc func customBackMethod(sender: UIBarButtonItem) {
         ContinuousGlucose.sharedInstance().stopSession()
 
@@ -149,7 +149,6 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToMeasurementDetails" {
             let MeasurementDetailsVC = (segue.destination as! MeasurementDetailsViewController)
-            //MeasurementDetailsVC.modalPresentationStyle = .fullScreen
             MeasurementDetailsVC.glucoseMeasurement = selectedGlucoseMeasurement
         }
     }
@@ -164,35 +163,11 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
         selectedGlucoseMeasurement = glucoseMeasurement
 
         performSegue(withIdentifier: "segueToMeasurementDetails", sender: self)
-
-        //self.addChildViewController(measurementDetailsVC)
-        //measurementDetailsVC.view.frame = self.view.frame
-        //self.view.addSubview(measurementDetailsVC.view)
-        //measurementDetailsVC.didMove(toParentViewController: self)
     }
 
     //MARK
     func continuousGlucoseMeasurement(measurement: ContinuousGlucoseMeasurement) {
-        glucoseMeasurementCounter += 1
-        measurement.existsOnFHIR = false
         glucoseMeasurements.append(measurement)
         updateLineChart()
-
-        // Upload method: single measurement
-        //if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
-        //    CGMFhir.CGMFhirInstance.uploadSingleMeasurement(measurement: measurement)
-        //}
-
-        // Upload method: bundle of 10 measurements
-        if !FHIR.fhirInstance.fhirServerAddress.isEmpty {
-            if glucoseMeasurementCounter == 10 {
-                glucoseMeasurementCounter = 0
-                CGMFhir.CGMFhirInstance.uploadObservationBundle(measurements: self.glucoseMeasurements) { (_, error) -> Void in
-                    if let error = error {
-                        print("error uploading bundle: \(error)")
-                    }
-                }
-            }
-        }
     }
 }

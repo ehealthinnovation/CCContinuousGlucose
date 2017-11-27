@@ -1,6 +1,6 @@
 //
 //  DiscoverCGMViewController.swift
-//  CCBluetooth
+//  CCContinuousGlucose
 //
 //  Created by Kevin Tallevi on 7/28/16.
 //  Copyright © 2016 CocoaPods. All rights reserved.
@@ -20,10 +20,6 @@ class DiscoverCGMViewController: UITableViewController, ContinuousGlucoseMeterDi
     var discoveredContinuousGlucoseMeters: Array<CBPeripheral> = Array<CBPeripheral>()
     var storedContinuousGlucoseMeters: Array<CBPeripheral> = Array<CBPeripheral>()
     var peripheral: CBPeripheral!
-    let refresh = UIRefreshControl()
-    let browser = NetServiceBrowser()
-    var fhirService = NetService()
-    var fhirServiceIP: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -154,65 +150,5 @@ class DiscoverCGMViewController: UITableViewController, ContinuousGlucoseMeterDi
         DispatchQueue.main.async(execute: {
             self.tableView.reloadData()
         })
-    }
-    
-    func getIPV4StringfromAddress(address: [Data]) -> String {
-        let data = address.first! as NSData
-        var values: [Int] = [0, 0, 0, 0]
-        for i in 0...3 {
-            data.getBytes(&values[i], range: NSRange(location: i+4, length: 1))
-        }
-        let ipStr = String(format: "%d.%d.%d.%d", values[0], values[1], values[2], values[3])
-        
-        return ipStr
-    }
-    
-    func showFHIRServerAlertController() {
-        let alert = UIAlertController(title: "Select FHIR server", message: "", preferredStyle: .actionSheet)
-        
-        alert.addAction(UIAlertAction(title: "fhirtest.uhn.ca", style: .default) { action in
-            action.isEnabled = true
-            FHIR.fhirInstance.setFHIRServerAddress(address: "fhirtest.uhn.ca")
-        })
-        alert.addAction(UIAlertAction(title: self.fhirService.name, style: .default) { action in
-            action.isEnabled = true
-            FHIR.fhirInstance.setFHIRServerAddress(address: self.fhirServiceIP!)
-        })
-        
-        self.present(alert, animated: true)
-    }
-    
-    @IBAction func discoverFHIRServersButtonAction(_ sender: Any) {
-        print("discoverFHIRServersButtonAction")
-        self.browser.delegate = self
-        self.browser.searchForServices(ofType: "_http._tcp.", inDomain: "local")
-    }
-}
-
-extension DiscoverCGMViewController: NetServiceBrowserDelegate {
-    func netServiceBrowser(_ browser: NetServiceBrowser, didFind service: NetService, moreComing: Bool) {
-        if service.name.contains("fhir") {
-            print("found fhir server")
-            self.browser.stop()
-            fhirService = service
-            fhirService.delegate = self
-            fhirService.resolve(withTimeout: 5.0)
-        }
-    }
-}
-
-extension DiscoverCGMViewController: NetServiceDelegate {
-    func netServiceDidResolveAddress(_ sender: NetService) {
-        fhirServiceIP = self.getIPV4StringfromAddress(address:sender.addresses!) + ":" + String(sender.port)
-        
-        self.showFHIRServerAlertController()
-    }
-    
-    func netService(_ sender: NetService, didNotResolve errorDict: [String : NSNumber]) {
-        print("didNotResolve")
-    }
-    
-    func netServiceWillResolve(_ sender: NetService) {
-        print("netServiceWillResolve")
     }
 }
