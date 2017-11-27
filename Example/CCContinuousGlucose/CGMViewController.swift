@@ -486,10 +486,10 @@ class CGMViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToSession" {
             let chartVC = segue.destination as! ChartViewController
-            chartVC.hyperAlertLine = 300
-            chartVC.hypoAlertLine = 90
-            chartVC.patientHighLine = 280
-            chartVC.patientLowLine = 100
+            chartVC.hyperAlertLine = Double(ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.hyperAlertLevel)
+            chartVC.hypoAlertLine = Double(ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.hypoAlertLevel)
+            chartVC.patientHighLine = Double(ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.patientHighAlertLevel)
+            chartVC.patientLowLine = Double(ContinuousGlucose.sharedInstance().continuousGlucoseSOCP.patientLowAlertLevel)
         }
     }
 

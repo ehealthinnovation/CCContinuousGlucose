@@ -101,7 +101,7 @@ class ChartViewController: UIViewController, ChartViewDelegate, ContinuousGlucos
         leftAxis.addLimitLine(hypoAlertLineLimit)
         leftAxis.addLimitLine(patientHighLineLimit)
         leftAxis.addLimitLine(patientLowLineLimit)
-        leftAxis.axisMaximum = 350.0
+        leftAxis.axisMaximum = self.hyperAlertLine + 100.0
         leftAxis.axisMinimum = 0.0
         leftAxis.gridLineDashLengths = [5.0, 5.0]
         leftAxis.drawZeroLineEnabled = false
